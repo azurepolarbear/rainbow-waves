@@ -2,9 +2,8 @@
   "name": "rainbow-waves",
   "version": "2.0.0",
   "description": "the rainbow waves algorithmic art project",
-  "main": "",
-  "scripts": {
-  },
+  "private": true,
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brittni-and-the-polar-bear/rainbow-waves.git"
@@ -41,9 +40,9 @@
     "url": "https://github.com/brittni-and-the-polar-bear/rainbow-waves/issues"
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
-  "dependencies": {
-  },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   }
 }
