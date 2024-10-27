@@ -33,20 +33,20 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
-                exclude: /node_modules/,
+                exclude: /node_modules/
             },
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.tsx', '.ts', '.js']
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'rainbow waves',
+            title: 'rainbow waves'
         })
     ],
     optimization: {
-        usedExports: true,
+        usedExports: true
     },
     output: {
         filename: 'sketch.js',
@@ -55,7 +55,7 @@ module.exports = {
     },
     devServer: {
         static: {
-            directory: path.join(__dirname, 'out/dist'),
+            directory: path.join(__dirname, 'out/dist')
         },
         client: {
             overlay: true
