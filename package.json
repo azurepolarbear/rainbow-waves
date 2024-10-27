@@ -45,6 +45,10 @@
     "url": "https://github.com/brittni-and-the-polar-bear/rainbow-waves/issues"
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
+  "dependencies": {
+    "@types/p5": "^1.7.6",
+    "p5": "^1.11.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@stylistic/eslint-plugin": "^2.9.0",
