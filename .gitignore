@@ -1,4 +1,7 @@
 *.DS_Store
 
+# node and npm
+node_modules/
+
 # WebStorm
 .idea/

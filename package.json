@@ -1,0 +1,49 @@
+{
+  "name": "rainbow-waves",
+  "version": "2.0.0",
+  "description": "the rainbow waves algorithmic art project",
+  "main": "",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brittni-and-the-polar-bear/rainbow-waves.git"
+  },
+  "keywords": [
+    "algorithmic art",
+    "code art",
+    "generative art",
+    "p5",
+    "p5.js",
+    "p5js",
+    "typescript",
+    "math",
+    "trigonometry",
+    "sine",
+    "sine waves"
+  ],
+  "author": {
+    "name": "brittni and the polar bear",
+    "url": "https://linktr.ee/brittniandthepolarbear"
+  },
+  "contributors": [
+    {
+      "name": "brittni watkins",
+      "url": "https://linktr.ee/brittniwatkins"
+    },
+    {
+      "name": "azurepolarbear",
+      "url": "https://linktr.ee/azurepolarbear"
+    }
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/brittni-and-the-polar-bear/rainbow-waves/issues"
+  },
+  "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
