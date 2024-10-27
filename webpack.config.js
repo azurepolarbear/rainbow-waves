@@ -26,7 +26,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/main/sketch.ts',
+    entry: {
+        sketch: {
+            import: './src/main/sketch.ts',
+            dependOn: 'p5'
+        },
+        p5: 'p5'
+    },
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -35,22 +41,33 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/
             },
-        ],
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader']
+            }
+        ]
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'rainbow waves'
+            title: 'rainbow waves',
+            inject: 'body',
+            favicon: './assets/icon/favicon.ico'
         })
     ],
     optimization: {
-        usedExports: true
+        usedExports: true,
+        splitChunks: {
+            chunks: 'all'
+        }
     },
     output: {
-        filename: 'sketch.js',
         path: path.resolve(__dirname, 'out/dist'),
+        filename: '[name].[fullhash:8].js',
+        sourceMapFilename: '[name].[fullhash:8].map',
+        chunkFilename: '[name].[fullhash:8].js',
         clean: true
     },
     devServer: {
@@ -67,5 +84,5 @@ module.exports = {
         liveReload: false,
         open: true,
         webSocketServer: false
-    },
+    }
 };
