@@ -3,7 +3,9 @@
   "version": "2.0.0",
   "description": "the rainbow waves algorithmic art project",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "webpack"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brittni-and-the-polar-bear/rainbow-waves.git"
@@ -41,6 +43,7 @@
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "devDependencies": {
+    "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"

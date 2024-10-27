@@ -2,6 +2,7 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "es6",
+    "jsx": "react",
 
     /* Modules */
     "module": "es6",

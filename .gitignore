@@ -3,5 +3,8 @@
 # node and npm
 node_modules/
 
+# Webpack
+out/
+
 # WebStorm
 .idea/

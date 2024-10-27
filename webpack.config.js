@@ -21,3 +21,26 @@
  * for full license details.
  */
 
+const path = require('path');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/main/sketch.ts',
+  devtool: 'inline-source-map',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts'],
+  },
+  output: {
+    filename: 'sketch.js',
+    path: path.resolve(__dirname, 'out/dist'),
+  }
+};
