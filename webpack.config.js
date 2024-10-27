@@ -38,7 +38,7 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts'],
+        extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -54,8 +54,18 @@ module.exports = {
         clean: true
     },
     devServer: {
-        static: path.join(__dirname, 'out/dist'),
+        static: {
+            directory: path.join(__dirname, 'out/dist'),
+        },
+        client: {
+            overlay: true
+        },
         compress: true,
+        host: '127.0.0.1',
         port: 8080,
+        hot: false,
+        liveReload: false,
+        open: true,
+        webSocketServer: false
     },
 };
