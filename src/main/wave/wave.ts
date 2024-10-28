@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 /*
  * Copyright (C) 2015-2024 brittni and the polar bear LLC.
  *
@@ -23,43 +21,29 @@
  * for full license details.
  */
 
-import P5Lib from 'p5';
+import P5Lib from "p5";
+import {Point} from "./point";
 
-import {
-    ASPECT_RATIOS,
-    CanvasContext,
-    P5Context,
-    ScreenHandler
-} from '@batpb/genart';
+export class Wave {
+    #base: P5Lib.Vector;
+    #length: number;
+    #amplitude: number;
+    #frequency: number;
+    #pointCount: number;
+    #deltaTheta: number;
+    const #points: Point[] = [];
 
-import '../../assets/styles/sketch.css';
+    constructor(base: P5Lib.Vector, length: number, amplitude: number, frequency: number, pointCount: number) {
+        this.#base = base;
+        this.#length = length;
+        this.#amplitude = amplitude;
+        this.#frequency = frequency;
+        this.#pointCount = pointCount;
+        this.#deltaTheta = 0.01;
+        this.#buildPoints();
+    }
 
-import { SketchScreen } from './sketch-screen';
+    #buildPoints(): void {
 
-function sketch(p5: P5Lib): void {
-    p5.setup = (): void => {
-        P5Context.initialize(p5);
-        CanvasContext.buildCanvas(ASPECT_RATIOS.SQUARE, 720, p5.P2D, true);
-        const screen: SketchScreen = new SketchScreen();
-        ScreenHandler.addScreen(screen);
-        ScreenHandler.currentScreen = screen.NAME;
-    };
-
-    p5.draw = (): void => {
-        ScreenHandler.draw();
-    };
-
-    p5.keyPressed = (): void => {
-        ScreenHandler.keyPressed();
-    };
-
-    p5.mousePressed = (): void => {
-        ScreenHandler.mousePressed();
-    };
-
-    p5.windowResized = (): void => {
-        CanvasContext.resizeCanvas();
-    };
+    }
 }
-
-new P5Lib(sketch);

@@ -1,7 +1,5 @@
-// noinspection DuplicatedCode
-
 /*
- * Copyright (C) 2015-2024 brittni and the polar bear LLC.
+ * Copyright (C) 2024 brittni and the polar bear LLC.
  *
  * This file is a part of brittni and the polar bear's rainbow waves algorithmic art project,
  * which is released under the GNU Affero General Public License, Version 3.0.
@@ -23,43 +21,28 @@
  * for full license details.
  */
 
-import P5Lib from 'p5';
+import {Coordinate, Point as PointShape} from '@batpb/genart'
+import P5Lib from "p5";
 
-import {
-    ASPECT_RATIOS,
-    CanvasContext,
-    P5Context,
-    ScreenHandler
-} from '@batpb/genart';
+export class Point {
+    #base: Coordinate = new Coordinate();
+    #point: PointShape;
+    #theta: number;
+    #amplitude: number;
+    #deltaTheta: number;
 
-import '../../assets/styles/sketch.css';
+    public constructor(base: P5Lib.Vector, theta: number, amp: number, deltaTheta: number) {
+        this.#base.position = base;
+        this.#theta = theta;
+        this.#amplitude = amp;
+        this.#deltaTheta = deltaTheta;
+    }
 
-import { SketchScreen } from './sketch-screen';
+    #updatePosition(): void {
 
-function sketch(p5: P5Lib): void {
-    p5.setup = (): void => {
-        P5Context.initialize(p5);
-        CanvasContext.buildCanvas(ASPECT_RATIOS.SQUARE, 720, p5.P2D, true);
-        const screen: SketchScreen = new SketchScreen();
-        ScreenHandler.addScreen(screen);
-        ScreenHandler.currentScreen = screen.NAME;
-    };
+    }
 
-    p5.draw = (): void => {
-        ScreenHandler.draw();
-    };
-
-    p5.keyPressed = (): void => {
-        ScreenHandler.keyPressed();
-    };
-
-    p5.mousePressed = (): void => {
-        ScreenHandler.mousePressed();
-    };
-
-    p5.windowResized = (): void => {
-        CanvasContext.resizeCanvas();
-    };
+    #calculateY(): number {
+        return this.#base.y + (Math.sin(this.#theta) * this.#amplitude);
+    }
 }
-
-new P5Lib(sketch);
