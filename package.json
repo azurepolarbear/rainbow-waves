@@ -8,7 +8,7 @@
     "deploy": "webpack --mode production",
     "build": "webpack --mode development",
     "start": "webpack-dev-server --mode development",
-    "stats": "webpack --mode development --profile --json > ./out/stats/stats.json"
+    "stats": "webpack --mode development --profile --json > ./out/stats.json"
   },
   "repository": {
     "type": "git",
