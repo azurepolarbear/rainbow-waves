@@ -23,6 +23,8 @@
 
 import P5Lib from 'p5';
 
+import { Color } from '@batpb/genart';
+
 import '../../assets/styles/sketch.css';
 
 function sketch(p5: P5Lib): void {
@@ -31,7 +33,8 @@ function sketch(p5: P5Lib): void {
     };
 
     p5.draw = (): void => {
-        p5.background(255, 50, 180);
+        const bg: Color = new Color(255, 50, 180);
+        p5.background(bg.color);
         p5.rectMode(p5.CENTER);
         p5.rect(p5.width / 2.0, p5.height / 2.0, 100, 100);
     };

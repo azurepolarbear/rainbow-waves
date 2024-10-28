@@ -24,14 +24,24 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+// TODO - test color imports as peer dependencies in genart
 
 module.exports = {
     entry: {
         sketch: {
             import: './src/main/sketch.ts',
-            dependOn: 'p5'
+            dependOn: [ 'p5', 'genart', 'nearestColor', 'cococh', 'colorNameList' ]
         },
-        p5: 'p5'
+        genart: {
+            import: '@batpb/genart',
+            dependOn: [ 'p5', 'nearestColor', 'cococh', 'colorNameList' ]
+        },
+        p5: 'p5',
+        nearestColor: 'nearest-color',
+        cococh: 'cococh',
+        colorNameList: 'color-name-list/dist/colornames.json'
     },
     devtool: 'inline-source-map',
     module: {
@@ -43,19 +53,20 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: ['style-loader', 'css-loader']
+                use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
             }
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: [ '.tsx', '.ts', '.js', '.json' ]
     },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'rainbow waves',
             inject: 'body',
             favicon: './assets/icon/favicon.ico'
-        })
+        }),
+        new MiniCssExtractPlugin()
     ],
     optimization: {
         usedExports: true,
