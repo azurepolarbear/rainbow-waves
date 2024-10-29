@@ -21,10 +21,10 @@
  * for full license details.
  */
 
-import {Coordinate, Point as PointShape} from '@batpb/genart'
+import {CanvasRedrawListener, Color, Coordinate, Point as PointShape} from '@batpb/genart'
 import P5Lib from "p5";
 
-export class Point {
+export class Point implements CanvasRedrawListener {
     #base: Coordinate = new Coordinate();
     #point: PointShape;
     #theta: number;
@@ -36,10 +36,27 @@ export class Point {
         this.#theta = theta;
         this.#amplitude = amp;
         this.#deltaTheta = deltaTheta;
+        this.#point = new PointShape();
+        this.#updatePosition();
+        this.#point.stroke = new Color(255, 0, 0);
+    }
+
+    public draw(): void {
+        this.#point.draw();
+        this.update();
+    }
+
+    public update(): void {
+        this.#theta += this.#deltaTheta;
+    }
+
+    public canvasRedraw(): void {
+        this.#point.canvasRedraw();
     }
 
     #updatePosition(): void {
-
+        this.#point.x = this.#base.x;
+        this.#point.y = this.#calculateY();
     }
 
     #calculateY(): number {

@@ -21,17 +21,18 @@
  * for full license details.
  */
 
-import P5Lib from "p5";
+import P5Lib, {length} from "p5";
 import {Point} from "./point";
+import {CanvasRedrawListener, P5Context} from "@batpb/genart";
 
-export class Wave {
+export class Wave implements CanvasRedrawListener {
     #base: P5Lib.Vector;
     #length: number;
     #amplitude: number;
     #frequency: number;
     #pointCount: number;
     #deltaTheta: number;
-    const #points: Point[] = [];
+    readonly #points: Point[] = [];
 
     constructor(base: P5Lib.Vector, length: number, amplitude: number, frequency: number, pointCount: number) {
         this.#base = base;
@@ -44,6 +45,22 @@ export class Wave {
     }
 
     #buildPoints(): void {
+        let theta: number = 0;
 
+        for (let i: number = 0; i < this.#pointCount; i++) {
+            const pointBase: P5Lib.Vector = new P5Lib.Vector();
+            pointBase.x = this.#base.x + (i * (this.#length / this.#pointCount));
+            pointBase.y = this.#base.y;
+            const point: Point = new Point(pointBase, theta, this.#amplitude, this.#deltaTheta);
+            this.#points.push(point);
+            theta += ((P5Context.p5.TWO_PI * this.#frequency) / this.#pointCount);
+        }
+    }
+
+    canvasRedraw(): void {
+        this.#points.forEach((point: Point): void => point.canvasRedraw());
+    }
+
+    draw(): void {
     }
 }

@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "dependencies": {
-    "@batpb/genart": "file://~/Desktop/npm-test/batpb-genart-2.0.0-rainbow-waves-test-004.tgz",
+    "@batpb/genart": "file://~/Desktop/npm-test/batpb-genart-2.0.0-rainbow-waves-test-007.tgz",
     "@types/p5": "^1.7.6",
     "p5": "^1.11.0"
   },
