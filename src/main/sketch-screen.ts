@@ -1,7 +1,5 @@
-// noinspection DuplicatedCode
-
 /*
- * Copyright (C) 2015-2024 brittni and the polar bear LLC.
+ * Copyright (C) 2024 brittni and the polar bear LLC.
  *
  * This file is a part of brittni and the polar bear's rainbow waves algorithmic art project,
  * which is released under the GNU Affero General Public License, Version 3.0.
@@ -23,43 +21,22 @@
  * for full license details.
  */
 
-import P5Lib from 'p5';
+import { CanvasScreen, P5Context } from '@batpb/genart';
 
-import {
-    ASPECT_RATIOS,
-    CanvasContext,
-    P5Context,
-    ScreenHandler
-} from '@batpb/genart';
+export class SketchScreen extends CanvasScreen {
+    public constructor() {
+        super('sketch');
+    }
 
-import '../../assets/styles/sketch.css';
+    public draw(): void {
+        P5Context.p5.background(0, 175, 0);
+    }
 
-import { SketchScreen } from './sketch-screen';
+    public keyPressed(): void {
+        console.log('keyPressed');
+    }
 
-function sketch(p5: P5Lib): void {
-    p5.setup = (): void => {
-        P5Context.initialize(p5);
-        CanvasContext.buildCanvas(ASPECT_RATIOS.SQUARE, 720, p5.P2D, true);
-        const screen: SketchScreen = new SketchScreen();
-        ScreenHandler.addScreen(screen);
-        ScreenHandler.currentScreen = screen.NAME;
-    };
-
-    p5.draw = (): void => {
-        ScreenHandler.draw();
-    };
-
-    p5.keyPressed = (): void => {
-        ScreenHandler.keyPressed();
-    };
-
-    p5.mousePressed = (): void => {
-        ScreenHandler.mousePressed();
-    };
-
-    p5.windowResized = (): void => {
-        CanvasContext.resizeCanvas();
-    };
+    public mousePressed(): void {
+        console.log('mousePressed');
+    }
 }
-
-new P5Lib(sketch);
