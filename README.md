@@ -22,7 +22,7 @@ library: [@batpb/genart](https://www.npmjs.com/package/@batpb/genart).
 ### actions
 
 [![CodeQL](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/codeql.yml/badge.svg)](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/codeql.yml)
-[![Node.js Build](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/node-build.yml/badge.svg)](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/node-build.yml)
+[![Node.js Build](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/node-js.yml/badge.svg)](https://github.com/brittni-and-the-polar-bear/rainbow-waves/actions/workflows/node-js.yml)
 
 ----
 
