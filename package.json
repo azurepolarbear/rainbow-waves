@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
-    "deploy": "webpack --mode production",
+    "prod-build": "webpack --mode production",
     "build": "webpack --mode development",
     "start": "webpack-dev-server --mode development",
     "stats": "webpack --mode development --profile --json > ./out/stats.json"
