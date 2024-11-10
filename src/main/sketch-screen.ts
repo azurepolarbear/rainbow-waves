@@ -29,7 +29,7 @@ import {
     CoordinateMode,
     P5Context,
 } from '@batpb/genart';
-import {Wave} from './wave/wave-3';
+import {Wave} from './wave';
 import P5Lib from "p5";
 
 export class SketchScreen extends CanvasScreen {
