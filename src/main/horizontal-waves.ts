@@ -37,8 +37,6 @@ import {Wave} from "./wave";
 import P5Lib from "p5";
 
 // Up Next
-// - buffer between waves (some waves may overlap)
-// - random waves skipped
 // - colors
 // - choose palette
 // - color selection choices
@@ -50,6 +48,8 @@ import P5Lib from "p5";
 //     - mapped to full wave
 //     - HSL mapped color
 //     - RGB color
+// - random buffer between waves (some waves may overlap)
+// - random waves skipped
 
 // TYPES
 //  - same point count
@@ -120,7 +120,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
             w.build_createPoints();
             this.#WAVES.push(w);
             this.addRedrawListener(w);
-            yRatio = endY;
+            yRatio = endY + 0.01;
         }
     }
 
@@ -134,7 +134,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
 
         this.#WAVES.forEach((w: Wave): void => {
             w.draw();
-            w.debug_drawFrame(255);
+            // w.debug_drawFrame(255);
         });
     }
 
