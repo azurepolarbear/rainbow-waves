@@ -82,7 +82,9 @@ export class HorizontalWavesScreen extends CanvasScreen {
 
         this.#backgroundAlpha = Random.randomInt(5, 75);
 
-        let yRatio: number = 0;
+        let buffer: number = 0.01;
+        let yRatio: number = buffer;
+        let loopY: number = yRatio;
         let minWaves: number = 5;
         let maxWaves: number = 30;
         const minPoints: number = 10;
@@ -96,13 +98,13 @@ export class HorizontalWavesScreen extends CanvasScreen {
         manager.addColorSelectors(this.#colorSelectors());
         const selector: ColorSelector = manager.getRandomColorSelector();
 
-        while (yRatio < 1) {
+        while (loopY < (1 - buffer)) {
             const hRatio: number = Random.randomFloat(1.0 / maxWaves, 1.0 / minWaves);
             const w: Wave = new Wave();
             let endY: number = yRatio + hRatio;
 
-            if ((endY > 1) || ((1 - endY) < (1.0 / maxWaves))) {
-                endY = 1;
+            if (((endY + buffer) > (1 - buffer)) || ((1 - (endY + buffer)) < (1.0 / maxWaves))) {
+                endY = 1 - buffer;
             }
 
             Coordinate.coordinateMode = CoordinateMode.RATIO;
@@ -120,7 +122,8 @@ export class HorizontalWavesScreen extends CanvasScreen {
             w.build_createPoints();
             this.#WAVES.push(w);
             this.addRedrawListener(w);
-            yRatio = endY + 0.01;
+            loopY = Math.max(endY + buffer, yRatio + hRatio);
+            yRatio = endY + buffer;
         }
     }
 
