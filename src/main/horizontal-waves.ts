@@ -65,6 +65,7 @@ import P5Lib from "p5";
 //  - same delta theta on all points in a wave
 //  - same amplitude on all points in a wave
 //  - same spacing on all points in a wave
+//  - same size on all points in a wave
 //  - same buffer between waves
 //  - regular interval of waves skipped
 //  - no waves skipped
