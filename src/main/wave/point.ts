@@ -21,8 +21,9 @@
  * for full license details.
  */
 
-import {CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape} from '@batpb/genart'
-import P5Lib from "p5";
+import P5Lib from 'p5';
+
+import { CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape } from '@batpb/genart'
 
 export class Point implements CanvasRedrawListener {
     readonly #point: PointShape = new PointShape();
@@ -51,10 +52,6 @@ export class Point implements CanvasRedrawListener {
     public canvasRedraw(): void {
         this.#base.remap();
         this.#point.canvasRedraw();
-    }
-
-    public get amplitude(): undefined {
-        return undefined;
     }
 
     public set amplitude(amplitude: number) {
