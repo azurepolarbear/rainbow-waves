@@ -21,7 +21,15 @@
  * for full license details.
  */
 
-import {CanvasContext, CanvasRedrawListener, Coordinate, CoordinateMode, P5Context} from "@batpb/genart";
+import {
+    CanvasContext,
+    CanvasRedrawListener,
+    Color,
+    ColorSelector,
+    Coordinate,
+    CoordinateMode,
+    P5Context
+} from "@batpb/genart";
 import P5Lib from "p5";
 import {Point} from "./point";
 
@@ -63,6 +71,7 @@ export class Wave implements CanvasRedrawListener {
     #initialTheta: number = 0;
     #deltaTheta: number = 0.005;
     #rotation: number = 0;
+    #colorSelector: ColorSelector | undefined = undefined;
 
     public draw(): void {
         Coordinate.coordinateMode = CoordinateMode.CANVAS;
@@ -73,7 +82,6 @@ export class Wave implements CanvasRedrawListener {
         p5.rotate(this.#rotation);
         this.#POINTS.forEach((point: Point): void => point.draw());
         p5.pop();
-        this.#debug_drawFrame();
     }
 
     public canvasRedraw(): void {
@@ -118,6 +126,11 @@ export class Wave implements CanvasRedrawListener {
         return this;
     }
 
+    public build_setColorSelector(selector: ColorSelector): Wave {
+        this.#colorSelector = selector;
+        return this;
+    }
+
     public build_createPoints(): void {
         Coordinate.coordinateMode = CoordinateMode.CANVAS;
         const center_A: P5Lib.Vector = this.#EDGE_A.center;
@@ -137,7 +150,14 @@ export class Wave implements CanvasRedrawListener {
             pointBase.y = 0;
             const percent: number = pointBase.x / length;
             const amp: number = P5Context.p5.map(percent, 0, 1, amplitude_A, amplitude_B);
-            const point: Point = new Point(pointBase, amp, theta, this.#deltaTheta);
+
+            let color: Color = new Color(255, 0, 0);
+
+            if (this.#colorSelector) {
+                color = this.#colorSelector.getColor();
+            }
+
+            const point: Point = new Point(pointBase, amp, theta, this.#deltaTheta, color);
             this.#POINTS.push(point);
             theta += (((Math.PI * 2) * this.#frequency) / (this.#pointCount - 1));
         }
@@ -180,10 +200,10 @@ export class Wave implements CanvasRedrawListener {
         p5.pop();
     }
 
-    #debug_drawFrame(): void {
+    debug_drawFrame(border: number): void {
         const p5: P5Lib = P5Context.p5;
         Coordinate.coordinateMode = CoordinateMode.CANVAS;
-        p5.stroke(0);
+        p5.stroke(border);
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.noFill();
         p5.quad(this.#EDGE_A.top.x, this.#EDGE_A.top.y,
@@ -200,7 +220,7 @@ export class Wave implements CanvasRedrawListener {
         const center_B: P5Lib.Vector = this.#EDGE_B.center;
         p5.point(center_B.x, center_B.y);
 
-        p5.strokeWeight(CanvasContext.defaultStroke * 2);
+        p5.strokeWeight(CanvasContext.defaultStroke);
         p5.stroke(0, 255, 255);
         const dist: number = center_A.dist(center_B);
         p5.push();

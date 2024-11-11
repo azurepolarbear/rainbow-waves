@@ -21,10 +21,35 @@
  * for full license details.
  */
 
-import {ASPECT_RATIOS, CanvasContext, CanvasScreen, Coordinate, CoordinateMode, P5Context, Random} from "@batpb/genart";
+import {
+    ALL_PALETTES,
+    ASPECT_RATIOS,
+    CanvasContext,
+    CanvasScreen, ColorSelector, ColorSelectorManager,
+    Coordinate,
+    CoordinateMapper,
+    CoordinateMode,
+    P5Context,
+    PaletteColorSelector,
+    Random
+} from "@batpb/genart";
 import {Wave} from "./wave";
 import P5Lib from "p5";
 
+// Up Next
+// - buffer between waves (some waves may overlap)
+// - random waves skipped
+// - colors
+// - choose palette
+// - color selection choices
+//     - random color selection
+//     - in order (cycle)
+//     - in order (mirror)
+//     - mapped from 0 - TWO_PI
+//     - mapped to random range
+//     - mapped to full wave
+//     - HSL mapped color
+//     - RGB color
 
 // TYPES
 //  - same point count
@@ -32,38 +57,65 @@ import P5Lib from "p5";
 //  - same height
 //  - same length (randomize lengths!)
 //  - same starting theta
+//  - same palette, color selection, and mapping
+//  - same palette and color selection
+//  - same palette
+//  - same color selection type (HSL, RGB, Palette)
+//  - same alignment on all points (starting x)
 //  - same delta theta on all points in a wave
 //  - same amplitude on all points in a wave
-//  - same alignment on all points (starting x)
+//  - same spacing on all points in a wave
+//  - same buffer between waves
+//  - regular interval of waves skipped
+//  - no waves skipped
+//  - no waves overlapping
 
 export class HorizontalWavesScreen extends CanvasScreen {
     readonly #WAVES: Wave[] = [];
+
+    readonly #backgroundAlpha: number = 10;
 
     constructor() {
         super('horizontal waves');
         const p5: P5Lib = P5Context.p5;
 
+        this.#backgroundAlpha = Random.randomInt(5, 75);
+
         let yRatio: number = 0;
         let minWaves: number = 5;
-        let maxWaves: number = 20;
+        let maxWaves: number = 30;
         const minPoints: number = 10;
         const maxPoints: number = 150;
+        const minFrequency: number = 0.5;
+        const maxFrequency: number = 10;
+        const minDeltaTheta: number = 0.005;
+        const maxDeltaTheta: number = 0.05;
+
+        const manager = new ColorSelectorManager();
+        manager.addColorSelectors(this.#colorSelectors());
+        const selector: ColorSelector = manager.getRandomColorSelector();
 
         while (yRatio < 1) {
             const hRatio: number = Random.randomFloat(1.0 / maxWaves, 1.0 / minWaves);
             const w: Wave = new Wave();
-            Coordinate.coordinateMode = CoordinateMode.RATIO;
-
             let endY: number = yRatio + hRatio;
 
             if ((endY > 1) || ((1 - endY) < (1.0 / maxWaves))) {
                 endY = 1;
             }
 
+            Coordinate.coordinateMode = CoordinateMode.RATIO;
             w.build_setEdge_A(p5.createVector(0, yRatio), p5.createVector(0, endY));
+
             Coordinate.coordinateMode = CoordinateMode.RATIO;
             w.build_setEdge_B(p5.createVector(1, yRatio), p5.createVector(1, endY));
-            w.build_setPointCount(Random.randomInt(minPoints, maxPoints));
+
+            w.build_setPointCount(Random.randomInt(minPoints, maxPoints))
+                .build_setFrequency(Random.randomFloat(minFrequency, maxFrequency))
+                .build_setDeltaTheta(Random.randomFloat(minDeltaTheta, maxDeltaTheta))
+                .build_setInitialTheta(Random.randomFloat(0, p5.TWO_PI))
+                .build_setColorSelector(selector);
+
             w.build_createPoints();
             this.#WAVES.push(w);
             this.addRedrawListener(w);
@@ -72,9 +124,16 @@ export class HorizontalWavesScreen extends CanvasScreen {
     }
 
     public override draw(): void {
-        P5Context.p5.background(220);
+        const p5: P5Lib = P5Context.p5;
+
+        p5.noStroke();
+        p5.fill(0, this.#backgroundAlpha);
+        p5.rectMode(p5.CORNER);
+        p5.rect(CoordinateMapper.minX - 10, CoordinateMapper.minY - 10, p5.width + 20, p5.height + 20);
+
         this.#WAVES.forEach((w: Wave): void => {
             w.draw();
+            w.debug_drawFrame(255);
         });
     }
 
@@ -97,5 +156,15 @@ export class HorizontalWavesScreen extends CanvasScreen {
     }
 
     public override mousePressed(): void {
+    }
+
+    #colorSelectors(): PaletteColorSelector[] {
+        const selectors: PaletteColorSelector[] = [];
+
+        for (const p of ALL_PALETTES.values) {
+            selectors.push(new PaletteColorSelector(p));
+        }
+
+        return selectors;
     }
 }

@@ -33,13 +33,13 @@ export class Point implements CanvasRedrawListener {
     #theta: number;
     #amplitude: number;
 
-    public constructor(base: P5Lib.Vector, amplitude: number, theta: number, deltaTheta: number) {
+    public constructor(base: P5Lib.Vector, amplitude: number, theta: number, deltaTheta: number, color: Color) {
         this.#base.position = base;
         this.#amplitude = amplitude;
         this.#theta = theta;
         this.#deltaTheta = deltaTheta;
 
-        this.#point.stroke = new Color(255, 0, 0);
+        this.#point.stroke = color;
         this.#point.strokeMultiplier = 4;
         this.updatePosition();
     }

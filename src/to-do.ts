@@ -24,8 +24,10 @@
 // TODO - layouts
 // TODO     - horizontal
 // TODO     - vertical
+// TODO     - diagonal
 // TODO     - gabriel graph
 // TODO     - random geometric graph (maybe?)
+// TODO     - mixed layouts on one canvas (separated by grids or lattices?)
 
 // TODO - graph point distributions
 // TODO     - square
