@@ -35,13 +35,16 @@ import {
 import '../../assets/styles/sketch.css';
 
 import { SketchScreen } from './sketch-screen';
+import {SketchScreen2} from "./sketch-screen-2";
 
 function sketch(p5: P5Lib): void {
     p5.setup = (): void => {
         P5Context.initialize(p5);
         CanvasContext.buildCanvas(ASPECT_RATIOS.SQUARE, 720, p5.P2D, true);
         const screen: SketchScreen = new SketchScreen();
+        const screen2: SketchScreen2 = new SketchScreen2();
         ScreenHandler.addScreen(screen);
+        ScreenHandler.addScreen(screen2);
         ScreenHandler.currentScreen = screen.NAME;
     };
 

@@ -21,16 +21,16 @@
  * for full license details.
  */
 
-import {CanvasRedrawListener, Color, Coordinate, Point as PointShape} from '@batpb/genart'
+import {CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape} from '@batpb/genart'
 import P5Lib from "p5";
 
 export class Point implements CanvasRedrawListener {
     readonly #point: PointShape = new PointShape();
     readonly #base: Coordinate = new Coordinate();
-    readonly #amplitude: number;
     readonly #deltaTheta: number;
 
     #theta: number;
+    #amplitude: number;
 
     public constructor(base: P5Lib.Vector, amplitude: number, theta: number, deltaTheta: number) {
         this.#base.position = base;
@@ -40,17 +40,12 @@ export class Point implements CanvasRedrawListener {
 
         this.#point.stroke = new Color(255, 0, 0);
         this.#point.strokeMultiplier = 4;
-        this.#updatePosition();
+        this.updatePosition();
     }
 
     public draw(): void {
         this.#point.draw();
-        this.update();
-    }
-
-    public update(): void {
-        this.#theta += this.#deltaTheta;
-        this.#updatePosition();
+        this.#update();
     }
 
     public canvasRedraw(): void {
@@ -58,12 +53,31 @@ export class Point implements CanvasRedrawListener {
         this.#point.canvasRedraw();
     }
 
-    #updatePosition(): void {
+    public get amplitude(): undefined {
+        return undefined;
+    }
+
+    public set amplitude(amplitude: number) {
+        this.#amplitude = amplitude;
+    }
+
+    public get base(): Coordinate {
+        return this.#base;
+    }
+
+    public updatePosition(): void {
+        Coordinate.coordinateMode = CoordinateMode.CANVAS;
         this.#point.x = this.#base.x;
         this.#point.y = this.#calculateY();
     }
 
+    #update(): void {
+        this.#theta += this.#deltaTheta;
+        this.updatePosition();
+    }
+
     #calculateY(): number {
-        return this.#base.y + (Math.sin(this.#theta) * this.#amplitude);
+        Coordinate.coordinateMode = CoordinateMode.CANVAS;
+        return (this.#base.y + (Math.sin(this.#theta) * this.#amplitude));
     }
 }

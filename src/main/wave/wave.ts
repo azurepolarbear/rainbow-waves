@@ -23,13 +23,18 @@
 
 import {CanvasContext, CanvasRedrawListener, Coordinate, CoordinateMode, P5Context} from "@batpb/genart";
 import P5Lib from "p5";
+import {Point} from "./point";
 
 class Edge {
     public readonly top: Coordinate = new Coordinate();
     public readonly bottom: Coordinate = new Coordinate();
 
-    public center(): P5Lib.Vector {
+    public get center(): P5Lib.Vector {
         return P5Lib.Vector.lerp(this.top.position, this.bottom.position, 0.5);
+    }
+
+    public get length(): number {
+        return P5Lib.Vector.dist(this.top.position, this.bottom.position);
     }
 
     public remap(): void {
@@ -38,57 +43,101 @@ class Edge {
     }
 }
 
+// TODO - initial theta
+// TODO - isMoving boolean
+// TODO - random amplitude for each point
+// TODO - perlin amplitude for each point
+// TODO - random theta for each point
+
 export class Wave implements CanvasRedrawListener {
-    readonly #edge_A: Edge = new Edge();
-    readonly #edge_B: Edge = new Edge();
+    public static readonly MIN_POINTS: number = 5;
+    public static readonly MAX_POINTS: number = 1_000;
+    public static readonly MIN_SPEED: number = 0.0001;
+    public static readonly MAX_SPEED: number = 1;
 
-    // public static readonly MIN_SPEED: number = 0.0001;
-    // public static readonly MAX_SPEED: number = 1;
-    // #length: number;
-    // #amplitude: number;
-    // #frequency: number;
-    // #pointCount: number;
-    //
-    // #deltaTheta: number;
-    // readonly #points: Point[] = [];
-    //
-    // static readonly #MIN_POINTS: number = 5;
-    // static readonly #MAX_POINTS: number = 1_000;
+    readonly #EDGE_A: Edge = new Edge();
+    readonly #EDGE_B: Edge = new Edge();
 
-    // readonly #leftEdge: Edge = new Edge();
-    // readonly #rightEdge: Edge = new Edge();
-    // readonly #deltaTheta: number = 0.05;
-    // readonly #points: Point[] = [];
-    // readonly #frequency: number = 1;
-    //
-    // #pointCount: number = 50;
-
+    #frequency: number = 1;
+    #pointCount: number = 25;
+    #deltaTheta: number = 0.005;
+    readonly #points: Point[] = [];
     #rotation: number = 0;
 
     public set_edge_A(top: P5Lib.Vector, bottom: P5Lib.Vector): Wave {
-        this.#edge_A.top.position = top;
-        this.#edge_A.bottom.position = bottom;
+        this.#EDGE_A.top.position = top;
+        this.#EDGE_A.bottom.position = bottom;
         this.#updateRotation();
         return this;
     }
 
     public set_edge_B(top: P5Lib.Vector, bottom: P5Lib.Vector): Wave {
-        this.#edge_B.top.position = top;
-        this.#edge_B.bottom.position = bottom;
+        this.#EDGE_B.top.position = top;
+        this.#EDGE_B.bottom.position = bottom;
         this.#updateRotation();
         return this;
     }
 
-    // public setPointCount(pointCount: number): Wave {
-    //     this.#pointCount = Math.floor(P5Context.p5.constrain(pointCount, Wave.MIN_POINTS, Wave.MAX_POINTS));
-    //     return this;
-    // }
+    public set_pointCount(pointCount: number): Wave {
+        this.#pointCount = Math.floor(P5Context.p5.constrain(pointCount, Wave.MIN_POINTS, Wave.MAX_POINTS));
+        return this;
+    }
+
+    public buildPoints(): void {
+        Coordinate.coordinateMode = CoordinateMode.CANVAS;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const length: number = P5Lib.Vector.dist(center_A, center_B);
+        this.#buildPoints(this.#EDGE_A.length / 2.0, this.#EDGE_B.length / 2.0, length);
+    }
+
+    #buildPoints(amplitude_A: number, amplitude_B: number, length: number): void {
+        let theta: number = 0;
+        const spacing: number = (length / this.#pointCount);
+        const offset: number = spacing / 2.0;
+
+        for (let i: number = 0; i < this.#pointCount; i++) {
+            const pointBase: P5Lib.Vector = new P5Lib.Vector();
+            pointBase.x = offset + (i * spacing);
+            pointBase.y = 0;
+            const percent: number = pointBase.x / length;
+            const amp: number = P5Context.p5.map(percent, 0, 1, amplitude_A, amplitude_B);
+            const point: Point = new Point(pointBase, amp, theta, this.#deltaTheta);
+            this.#points.push(point);
+            theta += ((P5Context.p5.TWO_PI * this.#frequency) / (this.#pointCount - 1));
+        }
+    }
+
+    updatePoints(): void {
+        Coordinate.coordinateMode = CoordinateMode.CANVAS;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const length: number = P5Lib.Vector.dist(center_A, center_B);
+
+        this.#updatePoints(this.#EDGE_A.length / 2.0, this.#EDGE_B.length / 2.0, length);
+    }
+
+    #updatePoints(amplitude_A: number, amplitude_B: number, length: number): void {
+        const spacing: number = (length / this.#pointCount);
+        const offset: number = spacing / 2.0;
+
+        for (let i: number = 0; i < this.#pointCount; i++) {
+            const point: Point = this.#points[i];
+            const pointBase: P5Lib.Vector = new P5Lib.Vector();
+            pointBase.x = offset + (i * spacing);
+            pointBase.y = 0;
+            point.base.position = pointBase;
+            const percent: number = pointBase.x / length;
+            point.amplitude = P5Context.p5.map(percent, 0, 1, amplitude_A, amplitude_B);
+            point.updatePosition();
+        }
+    }
 
     #updateRotation(): void {
         const p5: P5Lib = P5Context.p5;
         Coordinate.coordinateMode = CoordinateMode.CANVAS;
-        const center_A: P5Lib.Vector = this.#edge_A.center();
-        const translated_B: P5Lib.Vector = P5Lib.Vector.sub(this.#edge_B.center(), center_A);
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const translated_B: P5Lib.Vector = P5Lib.Vector.sub(this.#EDGE_B.center, center_A);
         p5.push();
         p5.translate(center_A.x, center_A.y);
         this.#rotation = translated_B.heading();
@@ -96,13 +145,23 @@ export class Wave implements CanvasRedrawListener {
     }
 
     draw(): void {
+        Coordinate.coordinateMode = CoordinateMode.CANVAS;
+        const p5: P5Lib = P5Context.p5;
+        p5.push();
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        p5.translate(center_A);
+        p5.rotate(this.#rotation);
+        this.#points.forEach((point: Point): void => point.draw());
+        p5.pop();
         this.#debug_drawFrame();
     }
 
     public canvasRedraw(): void {
-        this.#edge_A.remap();
-        this.#edge_B.remap();
+        this.#EDGE_A.remap();
+        this.#EDGE_B.remap();
         this.#updateRotation();
+        this.updatePoints();
+        this.#points.forEach((point: Point): void => point.canvasRedraw());
     }
 
     #debug_drawFrame(): void {
@@ -111,23 +170,22 @@ export class Wave implements CanvasRedrawListener {
         p5.stroke(0);
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.noFill();
-        p5.quad(this.#edge_A.top.x, this.#edge_A.top.y,
-            this.#edge_B.top.x, this.#edge_B.top.y,
-            this.#edge_B.bottom.x, this.#edge_B.bottom.y,
-            this.#edge_A.bottom.x, this.#edge_A.bottom.y);
+        p5.quad(this.#EDGE_A.top.x, this.#EDGE_A.top.y,
+            this.#EDGE_B.top.x, this.#EDGE_B.top.y,
+            this.#EDGE_B.bottom.x, this.#EDGE_B.bottom.y,
+            this.#EDGE_A.bottom.x, this.#EDGE_A.bottom.y);
 
         p5.strokeWeight(CanvasContext.defaultStroke * 5);
         p5.stroke(0, 255, 0);
-        const center_A: P5Lib.Vector = this.#edge_A.center();
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
         p5.point(center_A.x, center_A.y);
 
         p5.stroke(0, 0, 255);
-        const center_B: P5Lib.Vector = this.#edge_B.center();
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
         p5.point(center_B.x, center_B.y);
 
         p5.strokeWeight(CanvasContext.defaultStroke * 2);
         p5.stroke(0, 255, 255);
-        // const translated_B: P5Lib.Vector = P5Lib.Vector.sub(center_B, center_A);
         const dist: number = center_A.dist(center_B);
         p5.push();
         p5.translate(center_A.x, center_A.y);
@@ -135,54 +193,4 @@ export class Wave implements CanvasRedrawListener {
         p5.line(0, 0, dist, 0);
         p5.pop();
     }
-
-    // #buildPoints(): void {
-    //     Coordinate.coordinateMode = CoordinateMode.CANVAS;
-    //     const leftCenter: Coordinate = Edge.center(this.#leftEdge);
-    //     const rightCenter: Coordinate = Edge.center(this.#rightEdge);
-    //     const length: number = Math.abs(rightCenter.x - leftCenter.x);
-    //
-    //     let theta: number = 0;
-    //     let xSpace: number = (length / this.#pointCount);
-    //     let xOffset: number = xSpace / 2.0;
-    //
-    //     for (let i: number = 0; i < this.#pointCount; i++) {
-    //         const pointBase: P5Lib.Vector = new P5Lib.Vector();
-    //         pointBase.x = leftCenter.x + xOffset + (i * xSpace);
-    //         pointBase.y = this.#calculateBaseY(pointBase.x);
-    //         const amp: number = this.#calculateAmplitude(pointBase.x);
-    //         const point: Point = new Point(pointBase, amp, theta, this.#deltaTheta);
-    //         this.#points.push(point);
-    //         theta += ((P5Context.p5.TWO_PI * this.#frequency) / (this.#pointCount - 1));
-    //     }
-    // }
-
-    // #topPercent(x: number) {
-    //     const p5: P5Lib = P5Context.p5;
-    //     return p5.map(x, this.#leftEdge.top.x, this.#rightEdge.top.x, 0, 1);
-    // }
-    //
-    // #bottomPercent(x: number) {
-    //     const p5: P5Lib = P5Context.p5;
-    //     return p5.map(x, this.#leftEdge.bottom.x, this.#rightEdge.bottom.x, 0, 1);
-    // }
-    //
-    // #calculateAmplitude(x: number) {
-    //     const topPercent: number = this.#topPercent(x);
-    //     const bottomPercent: number = this.#bottomPercent(x);
-    //     const top: P5Lib.Vector = P5Lib.Vector.lerp(this.#leftEdge.top.position, this.#rightEdge.top.position, topPercent);
-    //     const bottom: P5Lib.Vector = P5Lib.Vector.lerp(this.#leftEdge.bottom.position, this.#rightEdge.bottom.position, bottomPercent);
-    //     const height: number = P5Lib.Vector.dist(top, bottom);
-    //     return height / 2.0;
-    // }
-    //
-    // #calculateBaseY(x: number) {
-    //     Coordinate.coordinateMode = CoordinateMode.CANVAS;
-    //     const p5: P5Lib = P5Context.p5;
-    //     const topPercent: number = p5.map(x, this.#leftEdge.top.x, this.#rightEdge.top.x, 0, 1);
-    //     const bottomPercent: number = p5.map(x, this.#leftEdge.bottom.x, this.#rightEdge.bottom.x, 0, 1);
-    //     const top: P5Lib.Vector = P5Lib.Vector.lerp(this.#leftEdge.top.position, this.#rightEdge.top.position, topPercent);
-    //     const bottom: P5Lib.Vector = P5Lib.Vector.lerp(this.#leftEdge.bottom.position, this.#rightEdge.bottom.position, bottomPercent);
-    //     return p5.lerp(top.y, bottom.y, 0.5);
-    // }
 }
