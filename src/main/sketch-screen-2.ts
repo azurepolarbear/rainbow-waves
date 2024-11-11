@@ -40,45 +40,45 @@ export class SketchScreen2 extends CanvasScreen {
 
         Coordinate.coordinateMode = CoordinateMode.CANVAS;
         let w: Wave = new Wave();
-        w.set_edge_A(new P5Lib.Vector(10, 10), new P5Lib.Vector(10, 190))
-            .set_edge_B(new P5Lib.Vector(290, 10), new P5Lib.Vector(290, 190))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(10, 10), new P5Lib.Vector(10, 190))
+            .build_setEdge_B(new P5Lib.Vector(290, 10), new P5Lib.Vector(290, 190))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         w = new Wave();
-        w.set_edge_A(new P5Lib.Vector(300 + 75, 10), new P5Lib.Vector(300, 190))
-            .set_edge_B(new P5Lib.Vector(590 - 75, 10), new P5Lib.Vector(590, 190))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(300 + 75, 10), new P5Lib.Vector(300, 190))
+            .build_setEdge_B(new P5Lib.Vector(590 - 75, 10), new P5Lib.Vector(590, 190))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         w = new Wave();
-        w.set_edge_A(new P5Lib.Vector(10, 200), new P5Lib.Vector(290, 200))
-            .set_edge_B(new P5Lib.Vector(10, 390), new P5Lib.Vector(290, 390))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(10, 200), new P5Lib.Vector(290, 200))
+            .build_setEdge_B(new P5Lib.Vector(10, 390), new P5Lib.Vector(290, 390))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         w = new Wave();
-        w.set_edge_A(new P5Lib.Vector(300, 200), new P5Lib.Vector(300, 390 - 100))
-            .set_edge_B(new P5Lib.Vector(590, 200), new P5Lib.Vector(590, 390))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(300, 200), new P5Lib.Vector(300, 390 - 100))
+            .build_setEdge_B(new P5Lib.Vector(590, 200), new P5Lib.Vector(590, 390))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         w = new Wave();
-        w.set_edge_A(new P5Lib.Vector(10, 400 + 100), new P5Lib.Vector(10, 590))
-            .set_edge_B(new P5Lib.Vector(290, 400), new P5Lib.Vector(290, 590 - 50))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(10, 400 + 100), new P5Lib.Vector(10, 590))
+            .build_setEdge_B(new P5Lib.Vector(290, 400), new P5Lib.Vector(290, 590 - 50))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         w = new Wave();
-        w.set_edge_A(new P5Lib.Vector(300, 400), new P5Lib.Vector(300 + 75, 590))
-            .set_edge_B(new P5Lib.Vector(590, 400), new P5Lib.Vector(590 - 75, 590))
-        .set_pointCount(Random.randomInt(20, 100))
-        .buildPoints();
+        w.build_setEdge_A(new P5Lib.Vector(300, 400), new P5Lib.Vector(300 + 75, 590))
+            .build_setEdge_B(new P5Lib.Vector(590, 400), new P5Lib.Vector(590 - 75, 590))
+        .build_setPointCount(Random.randomInt(20, 100))
+        .build_createPoints();
         this.#waves.push(w);
 
         this.#waves.forEach((w: Wave): void => {
@@ -103,7 +103,7 @@ export class SketchScreen2 extends CanvasScreen {
         } else if (p5.key === '3') {
             CanvasContext.updateAspectRatio(AspectRatioHandler.buildAspectRatio(16, 9) ?? ASPECT_RATIOS.SQUARE);
         } else if (p5.key === '4') {
-            ScreenHandler.currentScreen = 'sketch2';
+            ScreenHandler.currentScreen = 'sketch';
         } else if (p5.key === '0') {
             console.log(`framerate = ${p5.frameRate()}`);
         }

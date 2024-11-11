@@ -69,7 +69,7 @@ export class Point implements CanvasRedrawListener {
     }
 
     #update(): void {
-        this.#theta += this.#deltaTheta;
+        this.#theta = (this.#theta + this.#deltaTheta) % (Math.PI * 2);
         this.updatePosition();
     }
 
