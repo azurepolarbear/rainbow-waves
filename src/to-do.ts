@@ -21,13 +21,34 @@
  * for full license details.
  */
 
+// TODO - points
+// TODO     - alpha display (mixed or constant)
+// TODO     - point weight (same or different)
+// TODO     - point weight overlapping or buffered
+// TODO     - wave buffer dependent on maximum point buffer
+
+// TODO - special waves
+// TODO     - overlapping mirroring waves (same amp or different amp)
+// TODO     - overlapping random  waves
+// TODO     - overlapping waves (same frequency, different amplitudes)
+// TODO     - overlapping waves (half frequency, twice frequency, half amplitude, twice amplitude)
+
 // TODO - layouts
 // TODO     - horizontal
 // TODO     - vertical
+// TODO     - overlapping horizontal and vertical
+// TODO     - only show waves within a circle (how do we show a pattern only in a circle or polygon area?)ß
 // TODO     - diagonal
 // TODO     - gabriel graph
 // TODO     - random geometric graph (maybe?)
 // TODO     - mixed layouts on one canvas (separated by grids or lattices?)
+
+// TODO - patterns
+// TODO     - steadily increasing/decreasing amp
+// TODO     - steadily increasing/decreasing frequency
+// TODO     - set pattern of amp multiplication
+// TODO     - set pattern of frequency
+// TODO     - set pattern of wave type (special wave)
 
 // TODO - graph point distributions
 // TODO     - square
