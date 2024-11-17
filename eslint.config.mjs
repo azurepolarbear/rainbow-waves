@@ -102,14 +102,6 @@ export default tsEslint.config(
 
             'one-var': ['error', 'never'],
 
-            /* eslint-plugin-n */
-
-            'n/no-missing-import': 'off',
-
-            /* eslint-plugin-security */
-
-            'security/detect-object-injection': 'off',
-
             /* @stylistic/eslint-plugin */
 
             '@stylistic/brace-style': ['error', '1tbs'],
@@ -140,11 +132,11 @@ export default tsEslint.config(
             '@stylistic/member-delimiter-style': ['error', {
                 multiline: {
                     delimiter: 'semi',
-                    requireLast: false
+                    requireLast: true
                 },
                 singleline: {
                     delimiter: 'semi',
-                    requireLast: false
+                    requireLast: true
                 }
             }],
 
@@ -159,6 +151,14 @@ export default tsEslint.config(
             ],
 
             '@stylistic/semi': ['error', 'always'],
+
+            /* eslint-plugin-security */
+
+            'security/detect-object-injection': 'off',
+
+            /* eslint-plugin-n */
+
+            'n/no-missing-import': 'off',
 
             /* typescript-eslint */
 

@@ -30,10 +30,6 @@ module.exports = {
     entry: {
         sketch: {
             import: './src/main/sketch.ts',
-            dependOn: [ 'p5', 'genart' ]
-        },
-        genart: {
-            import: '@batpb/genart',
             dependOn: [ 'p5' ]
         },
         p5: 'p5'
