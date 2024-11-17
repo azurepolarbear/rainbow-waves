@@ -1,13 +1,13 @@
 {
   "name": "rainbow-waves",
-  "version": "2.0.0-DEVELOPMENT",
+  "version": "2.0.0-rc1",
   "description": "the rainbow waves algorithmic art project",
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
-    "prod-build": "webpack --mode production",
     "build": "webpack --mode development",
     "dev": "webpack-dev-server --mode development",
+    "prod": "webpack --mode production",
     "stats": "webpack --mode development --profile --json > ./out/stats.json"
   },
   "repository": {
@@ -55,8 +55,6 @@
     "@eslint/js": "^9.14.0",
     "@stylistic/eslint-plugin": "^2.10.1",
     "@types/eslint__js": "^8.42.3",
-    "@typescript-eslint/eslint-plugin": "^8.12.2",
-    "@typescript-eslint/parser": "^8.12.2",
     "css-loader": "^7.1.2",
     "eslint": "^9.14.0",
     "eslint-plugin-es-x": "^8.1.0",
