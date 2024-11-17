@@ -28,43 +28,33 @@
     "sine waves"
   ],
   "author": {
-    "name": "brittni and the polar bear",
-    "url": "https://linktr.ee/brittniandthepolarbear"
+    "name": "azurepolarbear",
+    "url": "https://linktr.ee/azurepolarbear"
   },
-  "contributors": [
-    {
-      "name": "brittni watkins",
-      "url": "https://linktr.ee/brittniwatkins"
-    },
-    {
-      "name": "azurepolarbear",
-      "url": "https://linktr.ee/azurepolarbear"
-    }
-  ],
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/brittni-and-the-polar-bear/rainbow-waves/issues"
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "dependencies": {
-    "@batpb/genart": "file://~/Desktop/npm-test/batpb-genart-2.0.0-rainbow-waves-test-013.tgz",
+    "@batpb/genart": "^2.0.0-rc1",
     "@types/p5": "^1.7.6",
     "p5": "^1.11.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.14.0",
+    "@eslint/js": "^9.15.0",
     "@stylistic/eslint-plugin": "^2.10.1",
     "@types/eslint__js": "^8.42.3",
     "css-loader": "^7.1.2",
-    "eslint": "^9.14.0",
-    "eslint-plugin-es-x": "^8.1.0",
-    "eslint-plugin-n": "^17.12.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-es-x": "^8.2.0",
+    "eslint-plugin-n": "^17.13.2",
     "eslint-plugin-security": "^3.0.1",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.12.2",
+    "typescript-eslint": "^8.14.0",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"
