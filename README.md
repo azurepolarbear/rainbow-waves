@@ -1,8 +1,8 @@
 # rainbow waves
 
-Copyright (C) 2015-2024 brittni and the polar bear LLC.
+Copyright (C) 2015-2024 brittni and the polar bear LLC. Some rights reserved.
 
-the rainbow waves algorithmic art project.
+[azurepolarbear's](https://github.com/azurepolarbear) rainbow waves algorithmic art project.
 
 Originally created in July 2015, the rainbow waves generative art project
 was released by [brittni watkins](https://github.com/blwatkins) on the 1ofX
@@ -61,7 +61,7 @@ The full text of the license can be found in the
 [LICENSE](https://github.com/brittni-and-the-polar-bear/rainbow-waves/blob/main/LICENSE)
 file in the root directory.
 
-The visual outputs of this distribution of the source code are licensed under the
+The visual outputs of this project are licensed under the
 [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License](https://creativecommons.org/licenses/by-nc-nd/4.0/).
 The full text of the license can be found in the
 [OUTPUT-LICENSE](https://github.com/brittni-and-the-polar-bear/rainbow-waves/blob/main/OUTPUT-LICENSE)
