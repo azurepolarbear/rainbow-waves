@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 /*
  * Copyright (C) 2015-2024 brittni and the polar bear LLC.
  *

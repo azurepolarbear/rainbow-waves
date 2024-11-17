@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 brittni and the polar bear LLC.
+ * Copyright (C) 2015-2024 brittni and the polar bear LLC.
  *
  * This file is a part of brittni and the polar bear's rainbow waves algorithmic art project,
  * which is released under the GNU Affero General Public License, Version 3.0.
