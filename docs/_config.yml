@@ -6,4 +6,4 @@ plugins:
 title: rainbow waves, by azurepolarbear
 description: azurepolarbear's rainbow waves algorithmic art project
 logo: "https://azurepolarbear.github.io/assets/img/logo.png"
-show_downloads: false
+show_downloads: true

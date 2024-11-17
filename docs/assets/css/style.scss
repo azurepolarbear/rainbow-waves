@@ -1,0 +1,17 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header {
+    position: static;
+}
+
+section {
+    min-height: 100vh;
+}
+
+footer {
+    position: static;
+    display: inline-block;
+}
