@@ -9,7 +9,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    target-branch: "development-main"
+    target-branch: "main"
     allow:
       - dependency-type: "direct"
     versioning-strategy: increase
@@ -46,7 +46,6 @@ updates:
           - "minor"
           - "patch"
     reviewers:
-      - "blwatkins"
       - "azurepolarbear"
 
   - package-ecosystem: github-actions
@@ -58,5 +57,4 @@ updates:
       prefix: "dependabot github-action update"
       include: "scope"
     reviewers:
-      - "blwatkins"
       - "azurepolarbear"
