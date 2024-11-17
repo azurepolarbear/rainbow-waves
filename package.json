@@ -7,7 +7,7 @@
     "lint": "eslint ./src",
     "prod-build": "webpack --mode production",
     "build": "webpack --mode development",
-    "start": "webpack-dev-server --mode development",
+    "dev": "webpack-dev-server --mode development",
     "stats": "webpack --mode development --profile --json > ./out/stats.json"
   },
   "repository": {
@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "dependencies": {
-    "@batpb/genart": "file://~/Desktop/npm-test/batpb-genart-2.0.0-rainbow-waves-test-009.tgz",
+    "@batpb/genart": "file://~/Desktop/npm-test/batpb-genart-2.0.0-rainbow-waves-test-013.tgz",
     "@types/p5": "^1.7.6",
     "p5": "^1.11.1"
   },

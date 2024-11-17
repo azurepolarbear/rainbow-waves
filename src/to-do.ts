@@ -21,6 +21,40 @@
  * for full license details.
  */
 
+// TODO - colors
+// TODO - choose palette
+// TODO - color selection choices
+//     - random color selection
+//     - in order (cycle)
+//     - in order (mirror)
+//     - mapped from 0 - TWO_PI
+//     - mapped to random range
+//     - mapped to full wave
+//     - HSL mapped color
+//     - RGB color
+// TODO - random buffer between waves (some waves may overlap)
+// TODO - random waves skipped
+
+// TODO - Wave Types
+//  - same point count
+//  - same point speed
+//  - same height
+//  - same length (randomize lengths!)
+//  - same starting theta
+//  - same palette, color selection, and mapping
+//  - same palette and color selection
+//  - same palette
+//  - same color selection type (HSL, RGB, Palette)
+//  - same alignment on all points (starting x)
+//  - same delta theta on all points in a wave
+//  - same amplitude on all points in a wave
+//  - same spacing on all points in a wave
+//  - same size on all points in a wave
+//  - same buffer between waves
+//  - regular interval of waves skipped
+//  - no waves skipped
+//  - no waves overlapping
+
 // TODO - points
 // TODO     - alpha display (mixed or constant)
 // TODO     - point weight (same or different)

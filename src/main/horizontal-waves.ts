@@ -36,41 +36,6 @@ import {
 import {Wave} from "./wave";
 import P5Lib from "p5";
 
-// Up Next
-// - colors
-// - choose palette
-// - color selection choices
-//     - random color selection
-//     - in order (cycle)
-//     - in order (mirror)
-//     - mapped from 0 - TWO_PI
-//     - mapped to random range
-//     - mapped to full wave
-//     - HSL mapped color
-//     - RGB color
-// - random buffer between waves (some waves may overlap)
-// - random waves skipped
-
-// TYPES
-//  - same point count
-//  - same point speed
-//  - same height
-//  - same length (randomize lengths!)
-//  - same starting theta
-//  - same palette, color selection, and mapping
-//  - same palette and color selection
-//  - same palette
-//  - same color selection type (HSL, RGB, Palette)
-//  - same alignment on all points (starting x)
-//  - same delta theta on all points in a wave
-//  - same amplitude on all points in a wave
-//  - same spacing on all points in a wave
-//  - same size on all points in a wave
-//  - same buffer between waves
-//  - regular interval of waves skipped
-//  - no waves skipped
-//  - no waves overlapping
-
 export class HorizontalWavesScreen extends CanvasScreen {
     readonly #WAVES: Wave[] = [];
 
@@ -125,6 +90,8 @@ export class HorizontalWavesScreen extends CanvasScreen {
             loopY = Math.max(endY + buffer, yRatio + hRatio);
             yRatio = endY + buffer;
         }
+
+        p5.background(0);
     }
 
     public override draw(): void {
@@ -150,6 +117,8 @@ export class HorizontalWavesScreen extends CanvasScreen {
             CanvasContext.updateAspectRatio(ASPECT_RATIOS.SOCIAL_VIDEO);
         } else if (p5.key === '3') {
             CanvasContext.updateAspectRatio(ASPECT_RATIOS.WIDESCREEN);
+        } else if (p5.key === '4') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.TIKTOK_PHOTO);
         } else if (p5.key === '8') {
             CanvasContext.updateResolution(720);
         } else if (p5.key === '9') {
@@ -157,6 +126,8 @@ export class HorizontalWavesScreen extends CanvasScreen {
         } else if (p5.key === '0') {
             console.log(`framerate = ${p5.frameRate()}`);
         }
+
+        p5.background(0);
     }
 
     public override mousePressed(): void {

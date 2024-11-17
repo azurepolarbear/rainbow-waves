@@ -23,10 +23,10 @@
 
 import P5Lib from 'p5';
 
-import { CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape } from '@batpb/genart'
+import {CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape} from '@batpb/genart'
 
 export class Point implements CanvasRedrawListener {
-    readonly #point: PointShape = new PointShape();
+    readonly #point: PointShape;
     readonly #base: Coordinate = new Coordinate();
     readonly #deltaTheta: number;
 
@@ -38,9 +38,9 @@ export class Point implements CanvasRedrawListener {
         this.#amplitude = amplitude;
         this.#theta = theta;
         this.#deltaTheta = deltaTheta;
-
-        this.#point.stroke = color;
-        this.#point.strokeMultiplier = 4;
+        this.#point = new PointShape({coordinateMode: CoordinateMode.CANVAS});
+        this.#point.style.stroke = color;
+        this.#point.style.strokeMultiplier = 4;
         this.updatePosition();
     }
 

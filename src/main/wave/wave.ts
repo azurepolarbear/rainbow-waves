@@ -38,11 +38,21 @@ class Edge {
     public readonly bottom: Coordinate = new Coordinate();
 
     public get center(): P5Lib.Vector {
-        return P5Lib.Vector.lerp(this.top.position, this.bottom.position, 0.5);
+        return P5Lib.Vector.lerp(this.topVector, this.bottomVector, 0.5);
     }
 
     public get length(): number {
-        return P5Lib.Vector.dist(this.top.position, this.bottom.position);
+        return P5Lib.Vector.dist(this.topVector, this.bottomVector);
+    }
+
+    public get bottomVector(): P5Lib.Vector {
+        const mode: CoordinateMode = CoordinateMode.CANVAS;
+        return (new P5Lib.Vector(this.bottom.getX(mode), this.bottom.getY(mode)));
+    }
+
+    public get topVector(): P5Lib.Vector {
+        const mode: CoordinateMode = CoordinateMode.CANVAS;
+        return (new P5Lib.Vector(this.top.getX(mode), this.top.getY(mode)));
     }
 
     public remap(): void {
@@ -55,6 +65,17 @@ class Edge {
 // TODO - random amplitude for each point
 // TODO - perlin amplitude for each point
 // TODO - random theta for each point
+
+export interface WaveConfig {
+    coordinateMode: CoordinateMode;
+    edgeA: {top: P5Lib.Vector, bottom: P5Lib.Vector};
+    edgeB: {top: P5Lib.Vector, bottom: P5Lib.Vector};
+    pointTotal: number;
+    frequency: number | Range;
+    deltaTheta: number | Range;
+    initialTheta: number;
+    colorSelector: ColorSelector;
+}
 
 export class Wave implements CanvasRedrawListener {
     public static readonly MIN_POINTS: number = 5;
@@ -73,8 +94,10 @@ export class Wave implements CanvasRedrawListener {
     #rotation: number = 0;
     #colorSelector: ColorSelector | undefined = undefined;
 
+    public constructor(config: WaveConfig) {
+    }
+
     public draw(): void {
-        Coordinate.coordinateMode = CoordinateMode.CANVAS;
         const p5: P5Lib = P5Context.p5;
         p5.push();
         const center_A: P5Lib.Vector = this.#EDGE_A.center;
@@ -92,40 +115,61 @@ export class Wave implements CanvasRedrawListener {
         this.#POINTS.forEach((point: Point): void => point.canvasRedraw());
     }
 
+    /**
+     * @deprecated
+     */
     public build_setEdge_A(top: P5Lib.Vector, bottom: P5Lib.Vector): Wave {
-        this.#EDGE_A.top.position = top;
-        this.#EDGE_A.bottom.position = bottom;
-        this.#updateRotation();
+        // this.#EDGE_A.top.setPosition(top);
+        // this.#EDGE_A.bottom.position = bottom;
+        // this.#updateRotation();
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setEdge_B(top: P5Lib.Vector, bottom: P5Lib.Vector): Wave {
-        this.#EDGE_B.top.position = top;
-        this.#EDGE_B.bottom.position = bottom;
-        this.#updateRotation();
+        // this.#EDGE_B.top.position = top;
+        // this.#EDGE_B.bottom.position = bottom;
+        // this.#updateRotation();
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setPointCount(pointCount: number): Wave {
         this.#pointCount = Math.floor(P5Context.p5.constrain(pointCount, Wave.MIN_POINTS, Wave.MAX_POINTS));
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setFrequency(frequency: number): Wave {
         this.#frequency = frequency;
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setDeltaTheta(deltaTheta: number): Wave {
         this.#deltaTheta = P5Context.p5.constrain(deltaTheta, Wave.MIN_SPEED, Wave.MAX_SPEED);
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setInitialTheta(initialTheta: number): Wave {
         this.#initialTheta = initialTheta % (Math.PI * 2);
         return this;
     }
 
+    /**
+     * @deprecated
+     */
     public build_setColorSelector(selector: ColorSelector): Wave {
         this.#colorSelector = selector;
         return this;
