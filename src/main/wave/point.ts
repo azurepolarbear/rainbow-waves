@@ -73,8 +73,8 @@ export class Point implements CanvasRedrawListener {
         this.#amplitude = amplitude;
     }
 
-    public get base(): Coordinate {
-        return this.#base;
+    public setBase(position: P5Lib.Vector, mode: CoordinateMode): void {
+        this.#base.setPosition(position, mode);
     }
 
     public updatePosition(): void {
