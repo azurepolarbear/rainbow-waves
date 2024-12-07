@@ -20,3 +20,44 @@
  * See OUTPUT-LICENSE or go to https://creativecommons.org/licenses/by-nc-nd/4.0/
  * for full license details.
  */
+
+import P5Lib from 'p5';
+
+import {
+    ASPECT_RATIOS,
+    CanvasContext,
+    P5Context,
+    ScreenHandler
+} from '@batpb/genart';
+
+import '../../assets/styles/sketch.css';
+
+import { HorizontalWavesScreen } from './horizontal-waves-screen';
+
+function sketch(p5: P5Lib): void {
+    p5.setup = (): void => {
+        P5Context.initialize(p5);
+        CanvasContext.buildCanvas(ASPECT_RATIOS.SQUARE, 720, p5.P2D, true);
+        const horizontalScreen: HorizontalWavesScreen = new HorizontalWavesScreen();
+        ScreenHandler.addScreen(horizontalScreen);
+        ScreenHandler.currentScreen = horizontalScreen.NAME;
+    };
+
+    p5.draw = (): void => {
+        ScreenHandler.draw();
+    };
+
+    p5.keyPressed = (): void => {
+        ScreenHandler.keyPressed();
+    };
+
+    p5.mousePressed = (): void => {
+        ScreenHandler.mousePressed();
+    };
+
+    p5.windowResized = (): void => {
+        CanvasContext.resizeCanvas();
+    };
+}
+
+new P5Lib(sketch);
