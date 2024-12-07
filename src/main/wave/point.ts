@@ -23,7 +23,13 @@
 
 import P5Lib from 'p5';
 
-import { CanvasRedrawListener, Color, Coordinate, CoordinateMode, Point as PointShape } from '@batpb/genart';
+import {
+    CanvasRedrawListener,
+    Color,
+    Coordinate,
+    CoordinateMode,
+    Point as PointShape
+} from '@batpb/genart';
 
 export interface PointConfig {
     readonly base: P5Lib.Vector | { x: number; y: number; };
