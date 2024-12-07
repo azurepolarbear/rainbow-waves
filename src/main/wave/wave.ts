@@ -29,9 +29,9 @@ import {
     Coordinate,
     CoordinateMode,
     P5Context
-} from "@batpb/genart";
-import P5Lib from "p5";
-import {Point, PointConfig} from "./point";
+} from '@batpb/genart';
+import P5Lib from 'p5';
+import { Point, PointConfig } from './point';
 
 interface PointData {
     amplitude_A: number;

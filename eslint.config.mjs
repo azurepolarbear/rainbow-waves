@@ -39,7 +39,7 @@ export default tsEslint.config(
     stylistic.configs['recommended-flat'],
     ...tsEslint.configs.recommendedTypeChecked,
     ...tsEslint.configs.strictTypeChecked,
-    ...tsEslint.configs.strictTypeChecked,
+    ...tsEslint.configs.stylisticTypeChecked,
     {
         languageOptions: {
             parserOptions: {
