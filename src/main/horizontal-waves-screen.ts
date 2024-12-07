@@ -35,9 +35,9 @@ import {
     P5Context,
     PaletteColorSelector,
     Random
-} from "@batpb/genart";
+} from '@batpb/genart';
 
-import {Wave, WaveConfig} from './wave';
+import { Wave, WaveConfig } from './wave';
 
 export class HorizontalWavesScreen extends CanvasScreen {
     readonly #WAVES: Wave[] = [];
@@ -50,11 +50,11 @@ export class HorizontalWavesScreen extends CanvasScreen {
 
         this.#backgroundAlpha = Random.randomInt(5, 75);
 
-        let buffer: number = 0.01;
+        const buffer: number = 0.01;
         let yRatio: number = buffer;
         let loopY: number = yRatio;
-        let minWaves: number = 5;
-        let maxWaves: number = 30;
+        const minWaves: number = 5;
+        const maxWaves: number = 30;
         const minPoints: number = 10;
         const maxPoints: number = 150;
         const minFrequency: number = 0.5;
@@ -74,7 +74,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
                 endY = 1 - buffer;
             }
 
-            const config: WaveConfig =  {
+            const config: WaveConfig = {
                 coordinateMode: CoordinateMode.RATIO,
                 edgeA: { top: p5.createVector(0, yRatio), bottom: p5.createVector(0, endY) },
                 edgeB: { top: p5.createVector(1, yRatio), bottom: p5.createVector(1, endY) },
@@ -83,7 +83,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
                 deltaTheta: Random.randomFloat(minDeltaTheta, maxDeltaTheta),
                 initialTheta: Random.randomFloat(0, p5.TWO_PI),
                 colorSelector: selector
-            }
+            };
 
             const w: Wave = new Wave(config);
             this.#WAVES.push(w);
@@ -132,6 +132,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
     }
 
     public override mousePressed(): void {
+        console.log('mouse pressed');
     }
 
     #colorSelectors(): PaletteColorSelector[] {

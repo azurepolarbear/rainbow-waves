@@ -21,6 +21,8 @@
  * for full license details.
  */
 
+import P5Lib from 'p5';
+
 import {
     CanvasContext,
     CanvasRedrawListener,
@@ -30,7 +32,7 @@ import {
     CoordinateMode,
     P5Context
 } from '@batpb/genart';
-import P5Lib from 'p5';
+
 import { Point, PointConfig } from './point';
 
 interface PointData {
@@ -76,8 +78,8 @@ class Edge {
 
 export interface WaveConfig {
     coordinateMode: CoordinateMode;
-    edgeA: { top: P5Lib.Vector, bottom: P5Lib.Vector };
-    edgeB: { top: P5Lib.Vector, bottom: P5Lib.Vector };
+    edgeA: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
+    edgeB: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
     pointTotal: number;
     frequency: number;
     deltaTheta: number;
@@ -86,11 +88,6 @@ export interface WaveConfig {
 }
 
 export class Wave implements CanvasRedrawListener {
-    public static readonly MIN_POINTS: number = 5;
-    public static readonly MAX_POINTS: number = 1_000;
-    public static readonly MIN_SPEED: number = 0.0001;
-    public static readonly MAX_SPEED: number = 1;
-
     readonly #EDGE_A: Edge = new Edge();
     readonly #EDGE_B: Edge = new Edge();
     readonly #POINTS: Point[] = [];
@@ -117,13 +114,31 @@ export class Wave implements CanvasRedrawListener {
         this.#buildPoints();
     }
 
+    public static get MIN_POINTS(): number {
+        return 5;
+    }
+
+    public static get MAX_POINTS(): number {
+        return 1_000;
+    }
+
+    public static get MIN_SPEED(): number {
+        return 0.0001;
+    }
+
+    public static get MAX_SPEED(): number {
+        return 0.1;
+    }
+
     public draw(): void {
         const p5: P5Lib = P5Context.p5;
         p5.push();
         const center_A: P5Lib.Vector = this.#EDGE_A.center;
         p5.translate(center_A);
         p5.rotate(this.#rotation);
-        this.#POINTS.forEach((point: Point): void => point.draw());
+        this.#POINTS.forEach((point: Point): void => {
+            point.draw();
+        });
         p5.pop();
     }
 
@@ -132,7 +147,9 @@ export class Wave implements CanvasRedrawListener {
         this.#EDGE_B.remap();
         this.#updateRotation();
         this.#updatePoints();
-        this.#POINTS.forEach((point: Point): void => point.canvasRedraw());
+        this.#POINTS.forEach((point: Point): void => {
+            point.canvasRedraw();
+        });
     }
 
     #buildPoints(): void {
@@ -154,7 +171,7 @@ export class Wave implements CanvasRedrawListener {
                 theta: theta,
                 deltaTheta: this.#deltaTheta,
                 color: color
-            }
+            };
 
             const point: Point = new Point(config);
             this.#POINTS.push(point);
@@ -199,7 +216,7 @@ export class Wave implements CanvasRedrawListener {
             length: length,
             spacing: spacing,
             offset: spacing / 2.0
-        }
+        };
     }
 
     debug_drawFrame(border: number): void {
@@ -207,10 +224,16 @@ export class Wave implements CanvasRedrawListener {
         p5.stroke(border);
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.noFill();
-        p5.quad(this.#EDGE_A.topVector.x, this.#EDGE_A.topVector.y,
-            this.#EDGE_B.topVector.x, this.#EDGE_B.topVector.y,
-            this.#EDGE_B.bottomVector.x, this.#EDGE_B.bottomVector.y,
-            this.#EDGE_A.bottomVector.x, this.#EDGE_A.bottomVector.y);
+        p5.quad(
+            this.#EDGE_A.topVector.x,
+            this.#EDGE_A.topVector.y,
+            this.#EDGE_B.topVector.x,
+            this.#EDGE_B.topVector.y,
+            this.#EDGE_B.bottomVector.x,
+            this.#EDGE_B.bottomVector.y,
+            this.#EDGE_A.bottomVector.x,
+            this.#EDGE_A.bottomVector.y
+        );
 
         p5.strokeWeight(CanvasContext.defaultStroke * 5);
         p5.stroke(0, 255, 0);
