@@ -62,7 +62,7 @@ export class Point implements CanvasRedrawListener {
         this.#point = new PointShape({ coordinateMode: CoordinateMode.CANVAS });
         this.#point.style.stroke = config.color;
         this.#point.style.strokeMultiplier = 4;
-        this.updatePosition();
+        this.#updatePosition();
     }
 
     public draw(): void {
@@ -75,26 +75,28 @@ export class Point implements CanvasRedrawListener {
         this.#point.canvasRedraw();
     }
 
-    public set amplitude(amplitude: number) {
+    public setAmplitude(amplitude: number): void {
         this.#amplitude = amplitude;
+        this.#updatePosition();
     }
 
     public setBase(position: P5Lib.Vector, mode: CoordinateMode): void {
         this.#base.setPosition(position, mode);
-    }
-
-    public updatePosition(): void {
-        const mode: CoordinateMode = CoordinateMode.CANVAS;
-        this.#point.setX(this.#base.getX(mode), mode);
-        this.#point.setY(this.#calculateY(), mode);
-    }
-
-    #update(): void {
-        this.#theta = (this.#theta + this.#deltaTheta) % (Math.PI * 2);
-        this.updatePosition();
+        this.#updatePosition();
     }
 
     #calculateY(): number {
         return (this.#base.getY(CoordinateMode.CANVAS) + (Math.sin(this.#theta) * this.#amplitude));
+    }
+
+    #update(): void {
+        this.#theta = (this.#theta + this.#deltaTheta) % (Math.PI * 2);
+        this.#updatePosition();
+    }
+
+    #updatePosition(): void {
+        const mode: CoordinateMode = CoordinateMode.CANVAS;
+        this.#point.setX(this.#base.getX(mode), mode);
+        this.#point.setY(this.#calculateY(), mode);
     }
 }

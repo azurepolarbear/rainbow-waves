@@ -21,4 +21,5 @@
  * for full license details.
  */
 
-export * from './point';
+// export * from './point';
+export * from './point-set';

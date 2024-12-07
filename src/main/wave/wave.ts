@@ -33,7 +33,7 @@ import {
     P5Context
 } from '@batpb/genart';
 
-import { Point, PointConfig } from './point';
+import { PointSet, PointSetConfig } from './point';
 
 interface PointData {
     amplitude_A: number;
@@ -90,7 +90,8 @@ export interface WaveConfig {
 export class Wave implements CanvasRedrawListener {
     readonly #EDGE_A: Edge = new Edge();
     readonly #EDGE_B: Edge = new Edge();
-    readonly #POINTS: Point[] = [];
+    // readonly #POINTS: Point[] = [];
+    readonly #POINT_SETS: PointSet[] = [];
 
     #frequency: number = 1;
     #pointTotal: number = 25;
@@ -136,8 +137,11 @@ export class Wave implements CanvasRedrawListener {
         const center_A: P5Lib.Vector = this.#EDGE_A.center;
         p5.translate(center_A);
         p5.rotate(this.#rotation);
-        this.#POINTS.forEach((point: Point): void => {
-            point.draw();
+        // this.#POINTS.forEach((point: Point): void => {
+        //     point.draw();
+        // });
+        this.#POINT_SETS.forEach((pointSet: PointSet): void => {
+           pointSet.draw();
         });
         p5.pop();
     }
@@ -147,8 +151,8 @@ export class Wave implements CanvasRedrawListener {
         this.#EDGE_B.remap();
         this.#updateRotation();
         this.#updatePoints();
-        this.#POINTS.forEach((point: Point): void => {
-            point.canvasRedraw();
+        this.#POINT_SETS.forEach((pointSet: PointSet): void => {
+            pointSet.canvasRedraw();
         });
     }
 
@@ -164,17 +168,19 @@ export class Wave implements CanvasRedrawListener {
             const amp: number = P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B);
             const color: Color = this.#colorSelector.getColor();
 
-            const config: PointConfig = {
+            const config: PointSetConfig = {
                 base: pointBase,
                 coordinateMode: CoordinateMode.CANVAS,
                 amplitude: amp,
                 theta: theta,
                 deltaTheta: this.#deltaTheta,
-                color: color
+                color: color,
+                totalPoints: 10,
+                evenDistribution: true
             };
 
-            const point: Point = new Point(config);
-            this.#POINTS.push(point);
+            const pointSet: PointSet = new PointSet(config);
+            this.#POINT_SETS.push(pointSet);
             theta += (((Math.PI * 2) * this.#frequency) / (this.#pointTotal - 1));
         }
     }
@@ -183,14 +189,15 @@ export class Wave implements CanvasRedrawListener {
         const data: PointData = this.#getPointData();
 
         for (let i: number = 0; i < this.#pointTotal; i++) {
-            const point: Point = this.#POINTS[i];
+            const pointSet: PointSet = this.#POINT_SETS[i];
             const pointBase: P5Lib.Vector = new P5Lib.Vector();
             pointBase.x = data.offset + (i * data.spacing);
             pointBase.y = 0;
-            point.setBase(pointBase, CoordinateMode.CANVAS);
+            // pointSet.updateBase();
+            // pointSet.updateAmplitude();
+            pointSet.setBase(pointBase, CoordinateMode.CANVAS);
             const percent: number = pointBase.x / data.length;
-            point.amplitude = P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B);
-            point.updatePosition();
+            pointSet.setAmplitude(P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B));
         }
     }
 
