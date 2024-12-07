@@ -53,7 +53,7 @@ export class PointSet implements CanvasRedrawListener {
 
     public constructor(config: PointSetConfig) {
         this.#totalPoints = config.totalPoints;
-        this.#angleLength = Math.PI / 2.0;
+        this.#angleLength = Math.PI;
         // this.#primaryTheta = config.theta;
         // this.#evenDistribution = true;
 
@@ -84,6 +84,10 @@ export class PointSet implements CanvasRedrawListener {
                 break;
             }
         }
+    }
+
+    public static get MIN_POINTS(): number {
+        return 1;
     }
 
     public setAmplitude(amplitude: number): void {

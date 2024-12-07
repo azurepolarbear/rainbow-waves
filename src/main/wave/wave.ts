@@ -175,7 +175,7 @@ export class Wave implements CanvasRedrawListener {
                 theta: theta,
                 deltaTheta: this.#deltaTheta,
                 color: color,
-                totalPoints: 10,
+                totalPoints: 50,
                 evenDistribution: true
             };
 

@@ -30,7 +30,7 @@ import {
     CanvasScreen,
     ColorSelector,
     ColorSelectorManager,
-    CoordinateMapper,
+    // CoordinateMapper,
     CoordinateMode,
     P5Context,
     PaletteColorSelector,
@@ -42,13 +42,13 @@ import { Wave, WaveConfig } from './wave';
 export class HorizontalWavesScreen extends CanvasScreen {
     readonly #WAVES: Wave[] = [];
 
-    readonly #backgroundAlpha: number = 10;
+    // readonly #backgroundAlpha: number = 10;
 
     constructor() {
         super('horizontal waves');
         const p5: P5Lib = P5Context.p5;
 
-        this.#backgroundAlpha = Random.randomInt(5, 75);
+        // this.#backgroundAlpha = Random.randomInt(5, 75);
 
         const buffer: number = 0.01;
         let yRatio: number = buffer;
@@ -98,10 +98,11 @@ export class HorizontalWavesScreen extends CanvasScreen {
     public override draw(): void {
         const p5: P5Lib = P5Context.p5;
 
-        p5.noStroke();
-        p5.fill(0, this.#backgroundAlpha);
-        p5.rectMode(p5.CORNER);
-        p5.rect(CoordinateMapper.minX - 10, CoordinateMapper.minY - 10, p5.width + 20, p5.height + 20);
+        // p5.noStroke();
+        // p5.fill(0, this.#backgroundAlpha);
+        // p5.rectMode(p5.CORNER);
+        // p5.rect(CoordinateMapper.minX - 10, CoordinateMapper.minY - 10, p5.width + 20, p5.height + 20);
+        p5.background(0);
 
         this.#WAVES.forEach((w: Wave): void => {
             w.draw();
@@ -133,6 +134,7 @@ export class HorizontalWavesScreen extends CanvasScreen {
 
     public override mousePressed(): void {
         console.log('mouse pressed');
+        console.log(`framerate = ${P5Context.p5.frameRate()}`);
     }
 
     #colorSelectors(): PaletteColorSelector[] {
