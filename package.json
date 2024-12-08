@@ -4,7 +4,7 @@
   "description": "the rainbow waves algorithmic art project",
   "private": true,
   "scripts": {
-    "lint": "eslint ./src",
+    "lint": "eslint -c eslint.config.ts.mjs ./src",
     "build": "webpack --mode development",
     "dev": "webpack-dev-server --mode development",
     "prod": "webpack --mode production",
