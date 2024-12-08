@@ -39,7 +39,7 @@
   "dependencies": {
     "@batpb/genart": "^2.0.0-rc2",
     "@types/p5": "^1.7.6",
-    "p5": "^1.11.1"
+    "p5": "^1.11.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
