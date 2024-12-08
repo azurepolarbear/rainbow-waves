@@ -64,10 +64,18 @@ module.exports = {
         new MiniCssExtractPlugin()
     ],
     optimization: {
-        usedExports: true,
+        concatenateModules: true,
+        emitOnErrors: false,
+        mangleExports: true,
+        mergeDuplicateChunks: true,
+        minimize: true,
+        providedExports: true,
+        removeAvailableModules: true,
+        removeEmptyChunks: true,
         splitChunks: {
             chunks: 'all'
-        }
+        },
+        usedExports: true
     },
     output: {
         path: path.resolve(__dirname, 'out/dist'),
@@ -87,7 +95,8 @@ module.exports = {
         host: '127.0.0.1',
         port: 8080,
         hot: false,
-        liveReload: false,
+        watchFiles: ['./src/**/*.ts'],
+        liveReload: true,
         open: true,
         webSocketServer: false
     }
