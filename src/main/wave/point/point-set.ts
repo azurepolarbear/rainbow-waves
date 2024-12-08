@@ -21,9 +21,9 @@
  * for full license details.
  */
 
-import {Point, PointConfig} from './point';
-import {CanvasRedrawListener, Color, CoordinateMode} from "@batpb/genart";
-import P5Lib from "p5";
+import { Point, PointConfig } from './point';
+import { CanvasRedrawListener, Color, CoordinateMode } from '@batpb/genart';
+import P5Lib from 'p5';
 
 export interface PointSetConfig {
     readonly base: P5Lib.Vector | { x: number; y: number; };
@@ -57,7 +57,7 @@ export class PointSet implements CanvasRedrawListener {
         // this.#primaryTheta = config.theta;
         // this.#evenDistribution = true;
 
-        let t: number  = config.theta;
+        let t: number = config.theta;
         const minAlpha: number = 50;
         let a: number = 255;
 
@@ -72,7 +72,7 @@ export class PointSet implements CanvasRedrawListener {
                 theta: t,
                 deltaTheta: config.deltaTheta,
                 color: c
-            }
+            };
 
             this.#POINTS.push(new Point(pConfig));
 

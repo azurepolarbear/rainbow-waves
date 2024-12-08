@@ -141,7 +141,7 @@ export class Wave implements CanvasRedrawListener {
         //     point.draw();
         // });
         this.#POINT_SETS.forEach((pointSet: PointSet): void => {
-           pointSet.draw();
+            pointSet.draw();
         });
         p5.pop();
     }
