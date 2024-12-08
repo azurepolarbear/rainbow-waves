@@ -6,14 +6,12 @@
     /* Modules */
     "module": "es2022",
     "moduleResolution": "bundler",
-    "rootDirs": [
-      "./src"
-    ],
+    "rootDir": "./src",
 
     /* JSON Modules */
     "resolveJsonModule": true,
-    "resolvePackageJsonExports": true,
-    "resolvePackageJsonImports": true,
+    "resolvePackageJsonExports": false,
+    "resolvePackageJsonImports": false,
 
     /* Emit */
     "outDir": "./out/compiled",
