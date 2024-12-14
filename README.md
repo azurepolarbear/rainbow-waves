@@ -6,7 +6,7 @@ Copyright (C) 2015-2024 brittni and the polar bear LLC. Some rights reserved.
 
 Originally created in July 2015, the rainbow waves generative art project
 was released by [brittni watkins](https://github.com/blwatkins) on the 1ofX
-generative art NFT marketplace in March 2022.
+generative art NFT marketplace on March 26, 2022.
 
 This project uses the brittni and the polar bear generative art
 library: [@batpb/genart](https://www.npmjs.com/package/@batpb/genart).
