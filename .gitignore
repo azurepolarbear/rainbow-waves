@@ -3,7 +3,7 @@
 # node and npm
 node_modules/
 
-# webpack
+# bundling, testing, and coverage output
 out/
 
 # WebStorm
