@@ -1,6 +1,6 @@
 {
   "name": "rainbow-waves",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0-rc.1",
   "description": "the rainbow waves algorithmic art project",
   "private": true,
   "scripts": {
@@ -42,13 +42,13 @@
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "dependencies": {
     "@batpb/genart": "^2.0.0-rc2",
-    "@types/p5": "^1.7.6",
     "p5": "^1.11.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@stylistic/eslint-plugin": "^2.12.1",
     "@types/eslint__js": "^8.42.3",
+    "@types/p5": "^1.7.6",
     "css-loader": "^7.1.2",
     "eslint": "^9.17.0",
     "eslint-plugin-es-x": "^8.4.1",
