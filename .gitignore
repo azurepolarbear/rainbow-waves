@@ -6,5 +6,5 @@ node_modules/
 # bundling, testing, and coverage output
 out/
 
-# WebStorm
+# WebStorm and JetBrains IDEs
 .idea/
