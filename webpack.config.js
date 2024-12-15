@@ -30,11 +30,11 @@ module.exports = {
     entry: {
         sketch: {
             import: './src/main/sketch.ts',
-            dependOn: [ 'p5', 'genart' ]
+            dependOn: ['p5', 'genart']
         },
         genart: {
             import: '@batpb/genart',
-            dependOn: [ 'p5' ]
+            dependOn: ['p5']
         },
         p5: 'p5'
     },
@@ -48,12 +48,12 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             }
         ]
     },
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js', '.json' ]
+        extensions: ['.tsx', '.ts', '.js', '.json']
     },
     plugins: [
         new HtmlWebpackPlugin({
