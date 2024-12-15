@@ -3,7 +3,7 @@
 # node and npm
 node_modules/
 
-# Webpack
+# webpack
 out/
 
 # WebStorm
