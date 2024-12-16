@@ -4,6 +4,7 @@
 name: Node.js Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
@@ -29,6 +30,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
+      - run: npm run lint:js
       - run: npm run lint:ts
       - run: npm run build:dev
       - run: npm run build:prod
