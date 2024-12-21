@@ -64,14 +64,14 @@ module.exports = {
         new MiniCssExtractPlugin()
     ],
     optimization: {
-        concatenateModules: true,
-        emitOnErrors: false,
-        mangleExports: true,
-        mergeDuplicateChunks: true,
-        minimize: true,
-        providedExports: true,
-        removeAvailableModules: true,
-        removeEmptyChunks: true,
+        // concatenateModules: true,
+        // emitOnErrors: false,
+        // mangleExports: true,
+        // mergeDuplicateChunks: true,
+        // minimize: true,
+        // providedExports: true,
+        // removeAvailableModules: true,
+        // removeEmptyChunks: true,
         splitChunks: {
             chunks: 'all'
         },
