@@ -21,3 +21,4 @@
  * for full license details.
  */
 
+export * from './wave';
