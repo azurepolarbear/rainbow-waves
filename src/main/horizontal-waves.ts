@@ -39,7 +39,7 @@ import {
 
 import { Wave, WaveConfig } from './wave';
 
-export class HorizontalWavesScreen extends CanvasScreen {
+export class HorizontalWaves extends CanvasScreen {
     readonly #WAVES: Wave[] = [];
 
     readonly #backgroundAlpha: number = 10;
