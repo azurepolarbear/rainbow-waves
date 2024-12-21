@@ -27,13 +27,17 @@ import {
     CanvasContext,
     CanvasRedrawListener,
     Color,
-    ColorSelector,
-    Coordinate,
+    ColorSelector, Coordinate,
     CoordinateMode,
     P5Context
 } from '@batpb/genart';
 
 import { Point, PointConfig } from './point';
+import { WaveEdge } from './wave-edge';
+
+// TODO - random amplitude for each point
+// TODO - perlin amplitude for each point
+// TODO - random theta for each point
 
 interface PointData {
     amplitude_A: number;
@@ -42,38 +46,6 @@ interface PointData {
     spacing: number;
     offset: number;
 }
-
-class Edge {
-    public readonly top: Coordinate = new Coordinate();
-    public readonly bottom: Coordinate = new Coordinate();
-
-    public get center(): P5Lib.Vector {
-        return P5Lib.Vector.lerp(this.topVector, this.bottomVector, 0.5);
-    }
-
-    public get length(): number {
-        return P5Lib.Vector.dist(this.topVector, this.bottomVector);
-    }
-
-    public get bottomVector(): P5Lib.Vector {
-        const mode: CoordinateMode = CoordinateMode.CANVAS;
-        return (new P5Lib.Vector(this.bottom.getX(mode), this.bottom.getY(mode)));
-    }
-
-    public get topVector(): P5Lib.Vector {
-        const mode: CoordinateMode = CoordinateMode.CANVAS;
-        return (new P5Lib.Vector(this.top.getX(mode), this.top.getY(mode)));
-    }
-
-    public remap(): void {
-        this.top.remap();
-        this.bottom.remap();
-    }
-}
-
-// TODO - random amplitude for each point
-// TODO - perlin amplitude for each point
-// TODO - random theta for each point
 
 export interface WaveConfig {
     coordinateMode: CoordinateMode;
@@ -87,8 +59,8 @@ export interface WaveConfig {
 }
 
 export class Wave implements CanvasRedrawListener {
-    readonly #EDGE_A: Edge = new Edge();
-    readonly #EDGE_B: Edge = new Edge();
+    readonly #EDGE_A: WaveEdge;
+    readonly #EDGE_B: WaveEdge;
     readonly #POINTS: Point[] = [];
 
     #frequency: number = 1;
@@ -99,10 +71,18 @@ export class Wave implements CanvasRedrawListener {
     #colorSelector: ColorSelector;
 
     public constructor(config: WaveConfig) {
-        this.#EDGE_A.top.setPosition(config.edgeA.top, config.coordinateMode);
-        this.#EDGE_A.bottom.setPosition(config.edgeA.bottom, config.coordinateMode);
-        this.#EDGE_B.top.setPosition(config.edgeB.top, config.coordinateMode);
-        this.#EDGE_B.bottom.setPosition(config.edgeB.bottom, config.coordinateMode);
+        const edgeA_top: Coordinate = new Coordinate();
+        edgeA_top.setPosition(config.edgeA.top, config.coordinateMode);
+        const edgeA_bottom: Coordinate = new Coordinate();
+        edgeA_bottom.setPosition(config.edgeA.bottom, config.coordinateMode);
+        this.#EDGE_A = new WaveEdge(edgeA_top, edgeA_bottom);
+
+        const edgeB_top: Coordinate = new Coordinate();
+        edgeB_top.setPosition(config.edgeB.top, config.coordinateMode);
+        const edgeB_bottom: Coordinate = new Coordinate();
+        edgeB_bottom.setPosition(config.edgeB.bottom, config.coordinateMode);
+        this.#EDGE_B = new WaveEdge(edgeB_top, edgeB_bottom);
+
         this.#updateRotation();
 
         this.#pointTotal = Math.floor(P5Context.p5.constrain(config.pointTotal, Wave.MIN_POINTS, Wave.MAX_POINTS));
@@ -224,14 +204,14 @@ export class Wave implements CanvasRedrawListener {
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.noFill();
         p5.quad(
-            this.#EDGE_A.topVector.x,
-            this.#EDGE_A.topVector.y,
-            this.#EDGE_B.topVector.x,
-            this.#EDGE_B.topVector.y,
-            this.#EDGE_B.bottomVector.x,
-            this.#EDGE_B.bottomVector.y,
-            this.#EDGE_A.bottomVector.x,
-            this.#EDGE_A.bottomVector.y
+            this.#EDGE_A.top.x,
+            this.#EDGE_A.top.y,
+            this.#EDGE_B.top.x,
+            this.#EDGE_B.top.y,
+            this.#EDGE_B.bottom.x,
+            this.#EDGE_B.bottom.y,
+            this.#EDGE_A.bottom.x,
+            this.#EDGE_A.bottom.y
         );
 
         p5.strokeWeight(CanvasContext.defaultStroke * 5);
