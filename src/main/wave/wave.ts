@@ -59,6 +59,7 @@ export interface WaveConfig {
     initialTheta: number;
     colorSelector: ColorSelector;
     pointSizeSelector: CategorySelector<PointSize>;
+    pointOverlap: boolean;
 }
 
 export class Wave implements CanvasRedrawListener {
@@ -74,6 +75,8 @@ export class Wave implements CanvasRedrawListener {
     #colorSelector: ColorSelector;
     #maxPointDiameter: number = 0;
     #pointSizeSelector: CategorySelector<PointSize>;
+    #pointOverlap: boolean = false;
+    // #fillSpace: boolean = true;
 
     public constructor(config: WaveConfig) {
         this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
@@ -87,6 +90,7 @@ export class Wave implements CanvasRedrawListener {
         this.#frequency = config.frequency;
         this.#colorSelector = config.colorSelector;
         this.#pointSizeSelector = config.pointSizeSelector;
+        this.#pointOverlap = config.pointOverlap;
 
         this.#buildPoints();
     }
@@ -154,18 +158,44 @@ export class Wave implements CanvasRedrawListener {
 
     #buildPoints(): void {
         const data: PointData = this.#getPointData();
-        let theta: number = this.#initialTheta;
+        // TODO - calculate the size of each point first
+        // TODO -  - get stroke multiplier, calculate diameter, calculate diameter's percentage of length
+        // TODO -  - generate multipliers until the total length is filled
+        // TODO - generate points using the multipliers
+        // TODO -  - calculate x position based on previous point's diameter and current diameter
 
-        for (let i: number = 0; i < this.#pointTotal; i++) {
-            const pointBase: P5Lib.Vector = new P5Lib.Vector();
-            pointBase.x = data.offset + (i * data.spacing);
-            pointBase.y = 0;
-            const percent: number = pointBase.x / data.length;
-            const amp: number = P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B);
-            const maxStrokeMultiplier: number = amp / 2.0 / CanvasContext.defaultStroke;
-            const color: Color = this.#colorSelector.getColor();
+        const minX: number = this.#EDGE_A.center.x;
+        const maxX: number = this.#EDGE_B.center.x;
+        const maxStrokeMultiplier: number = (Math.min(data.amplitude_A, data.amplitude_B) / 2.0) / CanvasContext.defaultStroke;
+
+        let currentX: number = minX + data.offset;
+        let previousEdge: number = minX;
+        let building: boolean = true;
+
+        while (building) {
             let strokeMultiplier: number = this.#pointSizeSelector.getChoice();
             strokeMultiplier = P5Context.p5.constrain(strokeMultiplier, 0, maxStrokeMultiplier);
+            let pointRadius: number = (CanvasContext.defaultStroke * strokeMultiplier) / 2.0;
+
+            if (((currentX - pointRadius) < previousEdge) && !this.#pointOverlap) {
+                currentX = previousEdge + pointRadius;
+            }
+
+            if ((currentX + pointRadius) > maxX) {
+                // const r: number = maxX - currentX;
+                // strokeMultiplier = (r * 2.0) / CanvasContext.defaultStroke;
+                // building = false;
+                break;
+            }
+
+            const pointBase: P5Lib.Vector = new P5Lib.Vector();
+            pointBase.x = currentX;
+            pointBase.y = 0;
+
+            const amp: number = P5Context.p5.map(pointBase.x, minX, maxX, data.amplitude_A, data.amplitude_B);
+            const theta: number = P5Context.p5.map(pointBase.x, minX, maxX, this.#initialTheta, this.#initialTheta + (Math.PI * 2 * this.#frequency));
+
+            const color: Color = this.#colorSelector.getColor();
 
             const config: PointConfig = {
                 base: pointBase,
@@ -179,10 +209,16 @@ export class Wave implements CanvasRedrawListener {
 
             const point: Point = new Point(config);
             this.#POINTS.push(point);
-            theta += (((Math.PI * 2) * this.#frequency) / (this.#pointTotal - 1));
 
             if (this.#maxPointDiameter < point.diameter) {
                 this.#maxPointDiameter = point.diameter;
+            }
+
+            previousEdge = currentX + (point.diameter / 2.0);
+            currentX = Math.max(previousEdge + data.spacing, currentX + data.spacing);
+
+            if (this.#POINTS.length >= this.#pointTotal) {
+                building = false;
             }
         }
     }
@@ -196,15 +232,15 @@ export class Wave implements CanvasRedrawListener {
         }
 
         const data: PointData = this.#getPointData();
+        const minX: number = this.#EDGE_A.center.x;
+        const maxX: number = this.#EDGE_B.center.x;
+        let initialTheta: number = this.#POINTS[0].theta;
 
-        for (let i: number = 0; i < this.#pointTotal; i++) {
-            const point: Point = this.#POINTS[i];
-            const pointBase: P5Lib.Vector = new P5Lib.Vector();
-            pointBase.x = data.offset + (i * data.spacing);
-            pointBase.y = 0;
-            point.setBase(pointBase, CoordinateMode.CANVAS);
-            const percent: number = pointBase.x / data.length;
-            point.amplitude = P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B);
+        for (const point of this.#POINTS) {
+            const pointX: number = point.base.getX(CoordinateMode.CANVAS);
+            point.amplitude = P5Context.p5.map(pointX, minX, maxX, data.amplitude_A, data.amplitude_B);
+            point.theta = P5Context.p5.map(pointX, minX, maxX, initialTheta, initialTheta + (Math.PI * 2 * this.#frequency));
+            point.canvasRedraw();
             point.updatePosition();
         }
     }
@@ -225,6 +261,7 @@ export class Wave implements CanvasRedrawListener {
         const center_B: P5Lib.Vector = this.#EDGE_B.center;
         const length: number = P5Lib.Vector.dist(center_A, center_B);
         const spacing: number = (length / this.#pointTotal);
+
         return {
             amplitude_A: (this.#EDGE_A.length / 2.0) - this.buffer,
             amplitude_B: (this.#EDGE_B.length / 2.0) - this.buffer,

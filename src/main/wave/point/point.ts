@@ -69,6 +69,10 @@ export class Point implements CanvasRedrawListener {
         this.updatePosition();
     }
 
+    public get base(): Coordinate {
+        return this.#base;
+    }
+
     get diameter(): number {
         return this.#strokeMultiplier * CanvasContext.defaultStroke;
     }
@@ -85,6 +89,14 @@ export class Point implements CanvasRedrawListener {
 
     public set amplitude(amplitude: number) {
         this.#amplitude = amplitude;
+    }
+
+    public get theta(): number {
+        return this.#theta;
+    }
+
+    public set theta(theta: number) {
+        this.#theta = theta;
     }
 
     public setBase(position: P5Lib.Vector, mode: CoordinateMode): void {

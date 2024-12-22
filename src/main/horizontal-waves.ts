@@ -60,12 +60,14 @@ export class HorizontalWaves extends CanvasScreen {
 
         this.#backgroundAlpha = Random.randomInt(5, 75);
 
+        // const minWaves: number = 1;
+        // const maxWaves: number = 100;
         const minWaves: number = 1;
-        const maxWaves: number = 100;
+        const maxWaves: number = 5;
         const minPoints: number = 10;
         const maxPoints: number = 150;
-        const minFrequency: number = 0.5;
-        const maxFrequency: number = 10;
+        // const minFrequency: number = 1;
+        // const maxFrequency: number = 1;
         const minDeltaTheta: number = 0.005;
         const maxDeltaTheta: number = 0.05;
 
@@ -75,10 +77,13 @@ export class HorizontalWaves extends CanvasScreen {
         manager.addColorSelectors(this.#colorSelectors());
         const selector: ColorSelector = manager.getRandomColorSelector();
 
-        const constantPointSize: boolean = true;
-        const constantPointCategory: boolean = true;
+        const constantPointSize: boolean = false;
+        const constantPointCategory: boolean = false;
         HorizontalWaves.#POINT_SIZE_SELECTOR.sameChoice = constantPointSize;
         HorizontalWaves.#POINT_SIZE_SELECTOR.currentCategory = PointSize.LARGE;
+
+        const pointOverlap: boolean = false;
+        // const constantPointOverlap: boolean = true; // TODO - implement
 
         let startYRatio: number = Random.randomFloat(-0.1, 0.01);
         let endYRatio: number = 0;
@@ -103,11 +108,13 @@ export class HorizontalWaves extends CanvasScreen {
                 edgeA: { top: p5.createVector(0, startYRatio), bottom: p5.createVector(0, endYRatio) },
                 edgeB: { top: p5.createVector(1, startYRatio), bottom: p5.createVector(1, endYRatio) },
                 pointTotal: Random.randomInt(minPoints, maxPoints),
-                frequency: Random.randomFloat(minFrequency, maxFrequency),
+                // frequency: Random.randomFloat(minFrequency, maxFrequency),
+                frequency: 2,
                 deltaTheta: Random.randomFloat(minDeltaTheta, maxDeltaTheta),
                 initialTheta: Random.randomFloat(0, p5.TWO_PI),
                 colorSelector: selector,
-                pointSizeSelector: HorizontalWaves.#POINT_SIZE_SELECTOR
+                pointSizeSelector: HorizontalWaves.#POINT_SIZE_SELECTOR,
+                pointOverlap: pointOverlap
             };
 
             const w: Wave = new Wave(config);
@@ -130,7 +137,7 @@ export class HorizontalWaves extends CanvasScreen {
 
         this.#WAVES.forEach((w: Wave): void => {
             w.draw();
-            // w.debug_drawFrame(255);
+            w.debug_drawFrame(255);
         });
     }
 
@@ -145,6 +152,8 @@ export class HorizontalWaves extends CanvasScreen {
             CanvasContext.updateAspectRatio(ASPECT_RATIOS.TIKTOK_PHOTO);
         } else if (p5.key === '4') {
             CanvasContext.updateAspectRatio(ASPECT_RATIOS.SOCIAL_VIDEO);
+        } else if (p5.key === '5') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.WIDESCREEN);
         } else if (p5.key === '8') {
             CanvasContext.updateResolution(720);
         } else if (p5.key === '9') {

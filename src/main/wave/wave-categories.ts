@@ -22,21 +22,16 @@
  */
 
 export enum PointSize {
-    SMALL = 0,
-    MEDIUM = 1,
-    LARGE = 2,
-    MIXED = 3
+    SMALL = 'small',
+    MEDIUM = 'medium',
+    LARGE = 'large',
+    MIXED = 'mixed'
 }
 
 export enum WaveDensity {
     LOW = 0, // 1-10 waves
     MEDIUM = 1, //10-25 waves
     HIGH = 2 //25-100 waves
-}
-
-export enum PointOverlap {
-    OVERLAP = 0,
-    NO_OVERLAP = 1
 }
 
 export enum PointAmplitude {
