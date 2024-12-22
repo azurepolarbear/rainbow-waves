@@ -23,15 +23,17 @@
 
 import P5Lib from 'p5';
 
-import { Coordinate, CoordinateMode } from '@batpb/genart';
+import {Coordinate, CoordinateMode} from '@batpb/genart';
 
 export class WaveEdge {
     readonly #top: Coordinate = new Coordinate();
     readonly #bottom: Coordinate = new Coordinate();
 
-    public constructor(top: Coordinate, bottom: Coordinate) {
-        this.#top = top;
-        this.#bottom = bottom;
+    public constructor(top: P5Lib.Vector, bottom: P5Lib.Vector, mode: CoordinateMode) {
+        this.#top = new Coordinate();
+        this.#top.setPosition(top, mode)
+        this.#bottom = new Coordinate();
+        this.#bottom.setPosition(bottom, mode);
     }
 
     public get center(): P5Lib.Vector {
@@ -55,5 +57,10 @@ export class WaveEdge {
     public remap(): void {
         this.#top.remap();
         this.#bottom.remap();
+    }
+
+    public update(top: P5Lib.Vector, bottom: P5Lib.Vector, mode: CoordinateMode): void {
+        this.#top.setPosition(top, mode);
+        this.#bottom.setPosition(bottom, mode);
     }
 }
