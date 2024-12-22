@@ -73,7 +73,6 @@ export class Wave implements CanvasRedrawListener {
     #rotation: number = 0;
     #colorSelector: ColorSelector;
     #maxPointDiameter: number = 0;
-    // #buffer: number = 0.01;
     #pointSizeSelector: CategorySelector<PointSize>;
 
     public constructor(config: WaveConfig) {
@@ -149,6 +148,7 @@ export class Wave implements CanvasRedrawListener {
         this.#EDGE_B.remap();
         this.#updateRotation();
         this.#updatePoints();
+
         this.#POINTS.forEach((point: Point): void => {
             point.canvasRedraw();
         });
@@ -164,8 +164,10 @@ export class Wave implements CanvasRedrawListener {
             pointBase.y = 0;
             const percent: number = pointBase.x / data.length;
             const amp: number = P5Context.p5.map(percent, 0, 1, data.amplitude_A, data.amplitude_B);
+            const maxStrokeMultiplier: number = amp / 2.0 / CanvasContext.defaultStroke;
             const color: Color = this.#colorSelector.getColor();
-            const strokeMultiplier: number = this.#pointSizeSelector.getChoice();
+            let strokeMultiplier: number = this.#pointSizeSelector.getChoice();
+            strokeMultiplier = P5Context.p5.constrain(strokeMultiplier, 0, maxStrokeMultiplier);
 
             const config: PointConfig = {
                 base: pointBase,
@@ -188,6 +190,13 @@ export class Wave implements CanvasRedrawListener {
     }
 
     #updatePoints(): void {
+        this.#maxPointDiameter = 0;
+        for (const point of this.#POINTS) {
+            if (this.#maxPointDiameter < point.diameter) {
+                this.#maxPointDiameter = point.diameter;
+            }
+        }
+
         const data: PointData = this.#getPointData();
 
         for (let i: number = 0; i < this.#pointTotal; i++) {
@@ -219,8 +228,8 @@ export class Wave implements CanvasRedrawListener {
         const length: number = P5Lib.Vector.dist(center_A, center_B);
         const spacing: number = (length / this.#pointTotal);
         return {
-            amplitude_A: this.#EDGE_A.length / 2.0,
-            amplitude_B: this.#EDGE_B.length / 2.0,
+            amplitude_A: (this.#EDGE_A.length / 2.0) - this.buffer,
+            amplitude_B: (this.#EDGE_B.length / 2.0) - this.buffer,
             length: length,
             spacing: spacing,
             offset: spacing / 2.0
@@ -229,21 +238,6 @@ export class Wave implements CanvasRedrawListener {
 
     debug_drawFrame(border: number): void {
         const p5: P5Lib = P5Context.p5;
-
-        p5.stroke(255, 0, 0);
-        p5.strokeWeight(CanvasContext.defaultStroke);
-        p5.noFill();
-        p5.quad(
-            this.#EDGE_A.top.x,
-            this.#EDGE_A.top.y - this.buffer,
-            this.#EDGE_B.top.x,
-            this.#EDGE_B.top.y - this.buffer,
-            this.#EDGE_B.bottom.x,
-            this.#EDGE_B.bottom.y + this.buffer,
-            this.#EDGE_A.bottom.x,
-            this.#EDGE_A.bottom.y + this.buffer
-        );
-
         p5.stroke(border);
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.noFill();
