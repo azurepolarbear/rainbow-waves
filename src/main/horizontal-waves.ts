@@ -46,8 +46,8 @@ export class HorizontalWaves extends CanvasScreen {
     static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
         {category: PointSize.SMALL, range: new Range(1, 10)},
         {category: PointSize.MEDIUM, range: new Range(10, 25)},
-        {category: PointSize.LARGE, range: new Range(25, 50)},
-        {category: PointSize.MIXED, range: new Range(1, 50)}
+        {category: PointSize.LARGE, range: new Range(25, 100)},
+        {category: PointSize.MIXED, range: new Range(1, 100)}
     ], Random.randomBoolean());
 
     readonly #WAVES: Wave[] = [];
@@ -76,17 +76,14 @@ export class HorizontalWaves extends CanvasScreen {
         const selector: ColorSelector = manager.getRandomColorSelector();
 
         const constantPointSize: boolean = true;
-        const constantPointCategory: boolean = false;
+        const constantPointCategory: boolean = true;
         HorizontalWaves.#POINT_SIZE_SELECTOR.sameChoice = constantPointSize;
+        HorizontalWaves.#POINT_SIZE_SELECTOR.currentCategory = PointSize.LARGE;
 
         let startYRatio: number = Random.randomFloat(-0.1, 0.01);
         let endYRatio: number = 0;
-        let bufferRatio: number = 0;
-        let topRatio: number = 0;
-        let bottomRatio: number = 0;
-        let prevBottomRatio: number = -1;
 
-        while (bottomRatio < 1) {
+        while (endYRatio < 1) {
             const minHRatio: number = (1.0 / maxWaves) * 0.5;
             const maxHRatio: number = (1.0 / wavesTotal) * 1.5;
             const hRatio: number = Random.randomFloat(minHRatio, maxHRatio);
@@ -117,20 +114,7 @@ export class HorizontalWaves extends CanvasScreen {
             this.#WAVES.push(w);
             this.addRedrawListener(w);
 
-            bufferRatio = w.buffer / p5.height;
-            topRatio = startYRatio - bufferRatio;
-            bottomRatio = endYRatio + bufferRatio;
-
-            if (topRatio < prevBottomRatio) {
-                startYRatio = prevBottomRatio + bufferRatio;
-                endYRatio = startYRatio + hRatio;
-                bottomRatio = endYRatio + bufferRatio;
-                w.updateEdgeA(p5.createVector(0, startYRatio), p5.createVector(0, endYRatio), CoordinateMode.RATIO);
-                w.updateEdgeB(p5.createVector(1, startYRatio), p5.createVector(1, endYRatio), CoordinateMode.RATIO);
-            }
-
-            prevBottomRatio = bottomRatio;
-            startYRatio = bottomRatio;
+            startYRatio = endYRatio;
         }
 
         p5.background(0);
