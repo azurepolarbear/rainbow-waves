@@ -34,12 +34,22 @@ import {
     CoordinateMode,
     P5Context,
     PaletteColorSelector,
-    Random
+    Random,
+    Range
 } from '@batpb/genart';
 
-import { Wave, WaveConfig } from './wave';
+import {Wave, WaveConfig} from './wave';
+import {PointSize} from "./wave/wave-categories";
+import {CategorySelector} from "./category-selector";
 
 export class HorizontalWaves extends CanvasScreen {
+    static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
+        {category: PointSize.SMALL, range: new Range(1, 10)},
+        {category: PointSize.MEDIUM, range: new Range(10, 25)},
+        {category: PointSize.LARGE, range: new Range(25, 50)},
+        {category: PointSize.MIXED, range: new Range(1, 50)}
+    ], Random.randomBoolean());
+
     readonly #WAVES: Wave[] = [];
 
     readonly #backgroundAlpha: number = 10;
@@ -50,52 +60,77 @@ export class HorizontalWaves extends CanvasScreen {
 
         this.#backgroundAlpha = Random.randomInt(5, 75);
 
-        const buffer: number = 0.01;
-        let yRatio: number = buffer;
-        let loopY: number = yRatio;
-        // const minWaves: number = 1;
+        const minWaves: number = 1;
         const maxWaves: number = 100;
-        // const minPoints: number = 10;
-        // const maxPoints: number = 150;
+        const minPoints: number = 10;
+        const maxPoints: number = 150;
         const minFrequency: number = 0.5;
         const maxFrequency: number = 10;
         const minDeltaTheta: number = 0.005;
         const maxDeltaTheta: number = 0.05;
 
-        // const wavesTotal: number = Random.randomInt(minWaves, maxWaves);
-        const wavesTotal: number = 5;
+        const wavesTotal: number = Random.randomInt(minWaves, maxWaves);
 
         const manager = new ColorSelectorManager();
         manager.addColorSelectors(this.#colorSelectors());
         const selector: ColorSelector = manager.getRandomColorSelector();
 
-        while (loopY < (1 - buffer)) {
+        const constantPointSize: boolean = true;
+        const constantPointCategory: boolean = false;
+        HorizontalWaves.#POINT_SIZE_SELECTOR.sameChoice = constantPointSize;
+
+        let startYRatio: number = Random.randomFloat(-0.1, 0.01);
+        let endYRatio: number = 0;
+        let bufferRatio: number = 0;
+        let topRatio: number = 0;
+        let bottomRatio: number = 0;
+        let prevBottomRatio: number = -1;
+
+        while (bottomRatio < 1) {
             const minHRatio: number = (1.0 / maxWaves) * 0.5;
             const maxHRatio: number = (1.0 / wavesTotal) * 1.5;
             const hRatio: number = Random.randomFloat(minHRatio, maxHRatio);
-            let endY: number = yRatio + hRatio;
 
-            if (((endY + buffer) > (1 - buffer)) || ((1 - (endY + buffer)) < minHRatio)) {
-                endY = 1 - buffer;
+            endYRatio = startYRatio + hRatio;
+
+            if (!constantPointCategory) {
+                HorizontalWaves.#POINT_SIZE_SELECTOR.setRandomCategory();
+            }
+
+            if (!constantPointSize) {
+                HorizontalWaves.#POINT_SIZE_SELECTOR.resetChoice();
             }
 
             const config: WaveConfig = {
                 coordinateMode: CoordinateMode.RATIO,
-                edgeA: { top: p5.createVector(0, yRatio), bottom: p5.createVector(0, endY) },
-                edgeB: { top: p5.createVector(1, yRatio), bottom: p5.createVector(1, endY) },
-                // pointTotal: Random.randomInt(minPoints, maxPoints),
-                pointTotal: 200,
+                edgeA: { top: p5.createVector(0, startYRatio), bottom: p5.createVector(0, endYRatio) },
+                edgeB: { top: p5.createVector(1, startYRatio), bottom: p5.createVector(1, endYRatio) },
+                pointTotal: Random.randomInt(minPoints, maxPoints),
                 frequency: Random.randomFloat(minFrequency, maxFrequency),
                 deltaTheta: Random.randomFloat(minDeltaTheta, maxDeltaTheta),
                 initialTheta: Random.randomFloat(0, p5.TWO_PI),
-                colorSelector: selector
+                colorSelector: selector,
+                pointSizeSelector: HorizontalWaves.#POINT_SIZE_SELECTOR
             };
 
             const w: Wave = new Wave(config);
             this.#WAVES.push(w);
             this.addRedrawListener(w);
-            loopY = Math.max(endY + buffer, yRatio + hRatio);
-            yRatio = endY + buffer;
+
+            bufferRatio = w.buffer / p5.height;
+            topRatio = startYRatio - bufferRatio;
+            bottomRatio = endYRatio + bufferRatio;
+
+            if (topRatio < prevBottomRatio) {
+                startYRatio = prevBottomRatio + bufferRatio;
+                endYRatio = startYRatio + hRatio;
+                bottomRatio = endYRatio + bufferRatio;
+                w.updateEdgeA(p5.createVector(0, startYRatio), p5.createVector(0, endYRatio), CoordinateMode.RATIO);
+                w.updateEdgeB(p5.createVector(1, startYRatio), p5.createVector(1, endYRatio), CoordinateMode.RATIO);
+            }
+
+            prevBottomRatio = bottomRatio;
+            startYRatio = bottomRatio;
         }
 
         p5.background(0);
