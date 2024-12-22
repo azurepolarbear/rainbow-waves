@@ -121,8 +121,6 @@ export class Wave implements CanvasRedrawListener {
             point.draw();
         });
         p5.pop();
-
-        this.debug_drawFrame(255);
     }
 
     public updateEdgeA(top: P5Lib.Vector, bottom: P5Lib.Vector, mode: CoordinateMode): void {
