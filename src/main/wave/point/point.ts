@@ -24,6 +24,7 @@
 import P5Lib from 'p5';
 
 import {
+    CanvasContext,
     CanvasRedrawListener,
     Color,
     Coordinate,
@@ -38,12 +39,14 @@ export interface PointConfig {
     readonly theta: number;
     readonly deltaTheta: number;
     readonly color: Color;
+    readonly strokeMultiplier: number;
 }
 
 export class Point implements CanvasRedrawListener {
     readonly #point: PointShape;
     readonly #base: Coordinate = new Coordinate();
     readonly #deltaTheta: number;
+    readonly #strokeMultiplier: number;
 
     #theta: number;
     #amplitude: number;
@@ -61,8 +64,13 @@ export class Point implements CanvasRedrawListener {
         this.#deltaTheta = config.deltaTheta;
         this.#point = new PointShape({ coordinateMode: CoordinateMode.CANVAS });
         this.#point.style.stroke = config.color;
-        this.#point.style.strokeMultiplier = 4;
+        this.#point.style.strokeMultiplier = config.strokeMultiplier;
+        this.#strokeMultiplier = config.strokeMultiplier;
         this.updatePosition();
+    }
+
+    get diameter(): number {
+        return this.#strokeMultiplier * CanvasContext.defaultStroke;
     }
 
     public draw(): void {
