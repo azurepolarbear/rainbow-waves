@@ -46,7 +46,7 @@ export class CirclePoint  implements CanvasRedrawListener{
     #amplitude: number;
 
     #center: P5Lib.Vector;
-    // #diameter: number;
+    #diameter: number;
 
     public constructor(config: CirclePointConfig) {
         const p5: P5Lib = P5Context.p5;
@@ -56,22 +56,24 @@ export class CirclePoint  implements CanvasRedrawListener{
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
 
         this.#style = config.style;
-        // this.#diameter = 0;
-        // this.#deltaTheta = config.deltaTheta;
-        // this.#strokeMultiplier = 1;
+
         this.#theta = config.theta;
         this.#amplitude = config.amplitude;
+        // this.#deltaTheta = config.deltaTheta;
 
         this.#coordinate_A.setPosition(config.x_A, config.coordinateMode);
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
         this.#center = p5.createVector();
+        this.#diameter = 0;
         this.#updateCenter()
+        this.#updateDiameter();
     }
 
     public canvasRedraw(): void {
         this.#coordinate_A.remap();
         this.#coordinate_B.remap();
         this.#updateCenter();
+        this.#updateDiameter();
     }
 
     public draw(): void {
@@ -79,7 +81,7 @@ export class CirclePoint  implements CanvasRedrawListener{
         p5.push();
         this.#style.applyStyle();
         p5.translate(this.#center.x, this.#center.y);
-        p5.ellipse(0, 0, 100, 100);
+        p5.ellipse(0, 0, this.#diameter, this.#diameter);
         p5.pop();
     }
 
@@ -93,5 +95,12 @@ export class CirclePoint  implements CanvasRedrawListener{
 
     #calculateY(): number {
         return (this.#coordinate_A.getY(CoordinateMode.CANVAS) + ((Math.sin(this.#theta) * this.#amplitude)));
+    }
+
+    #updateDiameter(): void {
+        const mode: CoordinateMode = CoordinateMode.CANVAS;
+        const a: P5Lib.Vector = P5Context.p5.createVector(this.#coordinate_A.getX(mode), this.#coordinate_A.getY(mode));
+        const b: P5Lib.Vector = P5Context.p5.createVector(this.#coordinate_B.getX(mode), this.#coordinate_B.getY(mode));
+        this.#diameter = a.dist(b);
     }
 }
