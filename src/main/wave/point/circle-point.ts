@@ -40,10 +40,9 @@ export class CirclePoint  implements CanvasRedrawListener{
     #coordinate_B: Coordinate;
     #style: GeometryStyle;
 
-    // #deltaTheta: number;
-    // #strokeMultiplier: number;
     #theta: number;
     #amplitude: number;
+    #deltaTheta: number;
 
     #center: P5Lib.Vector;
     #diameter: number;
@@ -59,7 +58,7 @@ export class CirclePoint  implements CanvasRedrawListener{
 
         this.#theta = config.theta;
         this.#amplitude = config.amplitude;
-        // this.#deltaTheta = config.deltaTheta;
+        this.#deltaTheta = config.deltaTheta;
 
         this.#coordinate_A.setPosition(config.x_A, config.coordinateMode);
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
@@ -83,6 +82,12 @@ export class CirclePoint  implements CanvasRedrawListener{
         p5.translate(this.#center.x, this.#center.y);
         p5.ellipse(0, 0, this.#diameter, this.#diameter);
         p5.pop();
+        this.#update();
+    }
+
+    #update(): void {
+        this.#theta += this.#deltaTheta;
+        this.#center.set(this.#center.x, this.#calculateY());
     }
 
     #updateCenter(): void {
