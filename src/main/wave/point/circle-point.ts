@@ -21,8 +21,9 @@
  * for full license details.
  */
 
-import { Coordinate, CoordinateMode, GeometryStyle, P5Context } from '@batpb/genart';
 import P5Lib from 'p5';
+
+import { CanvasRedrawListener, Coordinate, CoordinateMode, GeometryStyle, P5Context } from '@batpb/genart';
 
 export interface CirclePointConfig {
     readonly x_A: P5Lib.Vector;
@@ -34,20 +35,21 @@ export interface CirclePointConfig {
     readonly deltaTheta: number;
 }
 
-export class CirclePoint {
+export class CirclePoint  implements CanvasRedrawListener{
     #coordinate_A: Coordinate;
     #coordinate_B: Coordinate;
     #style: GeometryStyle;
 
     // #deltaTheta: number;
     // #strokeMultiplier: number;
-    // #theta: number;
-    // #amplitude: number;
-    //
-    // #center: P5Lib.Vector;
+    #theta: number;
+    #amplitude: number;
+
+    #center: P5Lib.Vector;
     // #diameter: number;
 
     public constructor(config: CirclePointConfig) {
+        const p5: P5Lib = P5Context.p5;
         this.#coordinate_A = new Coordinate();
         this.#coordinate_A.setPosition(config.x_A, config.coordinateMode);
         this.#coordinate_B = new Coordinate();
@@ -57,18 +59,39 @@ export class CirclePoint {
         // this.#diameter = 0;
         // this.#deltaTheta = config.deltaTheta;
         // this.#strokeMultiplier = 1;
-        // this.#theta = config.theta;
-        // this.#amplitude = config.amplitude;
+        this.#theta = config.theta;
+        this.#amplitude = config.amplitude;
 
         this.#coordinate_A.setPosition(config.x_A, config.coordinateMode);
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
+        this.#center = p5.createVector();
+        this.#updateCenter()
     }
 
-    public display(): void {
+    public canvasRedraw(): void {
+        this.#coordinate_A.remap();
+        this.#coordinate_B.remap();
+        this.#updateCenter();
+    }
+
+    public draw(): void {
         const p5: P5Lib = P5Context.p5;
         p5.push();
         this.#style.applyStyle();
-        // const pos: P5Lib.Vector = this.#coordinate_A.get
+        p5.translate(this.#center.x, this.#center.y);
+        p5.ellipse(0, 0, 100, 100);
         p5.pop();
+    }
+
+    #updateCenter(): void {
+        const x_A: number = this.#coordinate_A.getX(CoordinateMode.CANVAS);
+        const x_B: number = this.#coordinate_B.getX(CoordinateMode.CANVAS);
+        const centerX: number = (x_A + x_B) / 2;
+        const centerY: number = this.#calculateY();
+        this.#center.set(centerX, centerY);
+    }
+
+    #calculateY(): number {
+        return (this.#coordinate_A.getY(CoordinateMode.CANVAS) + ((Math.sin(this.#theta) * this.#amplitude)));
     }
 }
