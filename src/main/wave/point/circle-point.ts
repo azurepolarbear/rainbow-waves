@@ -21,8 +21,8 @@
  * for full license details.
  */
 
-import {Coordinate, CoordinateMode, GeometryStyle, P5Context} from "@batpb/genart";
-import P5Lib from "p5";
+import { Coordinate, CoordinateMode, GeometryStyle, P5Context } from '@batpb/genart';
+import P5Lib from 'p5';
 
 export interface CirclePointConfig {
     readonly x_A: P5Lib.Vector;
@@ -39,13 +39,13 @@ export class CirclePoint {
     #coordinate_B: Coordinate;
     #style: GeometryStyle;
 
-    #deltaTheta: number;
-    #strokeMultiplier: number;
-    #theta: number;
-    #amplitude: number;
-
-    #center: P5Lib.Vector;
-    #diameter: number;
+    // #deltaTheta: number;
+    // #strokeMultiplier: number;
+    // #theta: number;
+    // #amplitude: number;
+    //
+    // #center: P5Lib.Vector;
+    // #diameter: number;
 
     public constructor(config: CirclePointConfig) {
         this.#coordinate_A = new Coordinate();
@@ -54,11 +54,11 @@ export class CirclePoint {
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
 
         this.#style = config.style;
-        this.#diameter = 0;
-        this.#deltaTheta = config.deltaTheta;
-        this.#strokeMultiplier = 1;
-        this.#theta = config.theta;
-        this.#amplitude = config.amplitude;
+        // this.#diameter = 0;
+        // this.#deltaTheta = config.deltaTheta;
+        // this.#strokeMultiplier = 1;
+        // this.#theta = config.theta;
+        // this.#amplitude = config.amplitude;
 
         this.#coordinate_A.setPosition(config.x_A, config.coordinateMode);
         this.#coordinate_B.setPosition(config.x_B, config.coordinateMode);
