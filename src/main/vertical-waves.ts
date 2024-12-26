@@ -21,26 +21,48 @@
  * for full license details.
  */
 
-import {CanvasScreen, Color, ColorSelector, ColorSelectorType, CoordinateMode, P5Context, Random} from "@batpb/genart";
+import {
+    CanvasScreen,
+    Color,
+    ColorSelector,
+    ColorSelectorType,
+    CoordinateMode,
+    P5Context,
+    Random,
+    Range, ScreenHandler
+} from "@batpb/genart";
 import {Wave, WaveConfig} from "./wave";
 import P5Lib from "p5";
-import p5 from "p5";
+import {CategorySelector} from "./category-selector";
+import {PointSize} from "./wave/wave-categories";
 
 class RedSelector extends ColorSelector {
+    public constructor() {
+        super('red');
+    }
+
     public getColor(): Color {
-        return undefined;
+        return new Color(255, 0, 0);
     }
 
     public get type(): ColorSelectorType {
-        return undefined;
+        return ColorSelectorType.RGB;
     }
 }
 
 export class VerticalWaves extends CanvasScreen {
+    static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
+        {category: PointSize.SMALL, range: new Range(1, 10)},
+        {category: PointSize.MEDIUM, range: new Range(10, 25)},
+        {category: PointSize.LARGE, range: new Range(25, 100)},
+        {category: PointSize.MIXED, range: new Range(1, 100)}
+    ], Random.randomBoolean());
+
     #wave: Wave;
 
     public constructor() {
         super('vertical waves');
+        const p5: P5Lib = P5Context.p5;
 
         const config: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
@@ -50,12 +72,13 @@ export class VerticalWaves extends CanvasScreen {
             frequency: 2,
             deltaTheta: 0.005,
             initialTheta: 0,
-            colorSelector: selector,
-            pointSizeSelector: HorizontalWaves.#POINT_SIZE_SELECTOR,
-            pointOverlap: pointOverlap
+            colorSelector: new RedSelector(),
+            pointSizeSelector: VerticalWaves.#POINT_SIZE_SELECTOR,
+            pointOverlap: true
         };
 
         this.#wave = new Wave(config);
+        this.addRedrawListener(this.#wave);
     }
 
     public draw(): void {
@@ -66,6 +89,10 @@ export class VerticalWaves extends CanvasScreen {
     }
 
     keyPressed(): void {
+        const p5: P5Lib = P5Context.p5;
+        if (p5.key === 'a') {
+            ScreenHandler.currentScreen = 'horizontal waves';
+        }
     }
 
     mousePressed(): void {

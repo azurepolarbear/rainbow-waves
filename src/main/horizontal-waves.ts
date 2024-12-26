@@ -35,7 +35,7 @@ import {
     P5Context,
     PaletteColorSelector,
     Random,
-    Range
+    Range, ScreenHandler
 } from '@batpb/genart';
 
 import {Wave, WaveConfig} from './wave';
@@ -160,6 +160,8 @@ export class HorizontalWaves extends CanvasScreen {
             CanvasContext.updateResolution(1080);
         } else if (p5.key === '0') {
             console.log(`framerate = ${p5.frameRate()}`);
+        } else if (p5.key === 'a') {
+            ScreenHandler.currentScreen = 'vertical waves';
         }
 
         p5.background(0);
