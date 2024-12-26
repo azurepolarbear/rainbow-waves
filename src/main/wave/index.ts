@@ -20,5 +20,3 @@
  * See OUTPUT-LICENSE or go to https://creativecommons.org/licenses/by-nc-nd/4.0/
  * for full license details.
  */
-
-export * from './wave';
