@@ -32,7 +32,7 @@ import {
     P5Context
 } from '@batpb/genart';
 
-import { Point, PointConfig } from './point';
+import {CirclePoint, Point, PointConfig} from './point';
 import { WaveEdge } from './wave-edge';
 import {PointSize} from "./wave-categories";
 import {CategorySelector} from "../category-selector";
@@ -66,6 +66,7 @@ export class Wave implements CanvasRedrawListener {
     readonly #EDGE_A: WaveEdge;
     readonly #EDGE_B: WaveEdge;
     readonly #POINTS: Point[] = [];
+    readonly #CIRCLE_POINTS: CirclePoint[] = [];
 
     #frequency: number = 1;
     #pointTotal: number = 25;
@@ -158,92 +159,102 @@ export class Wave implements CanvasRedrawListener {
 
     #buildPoints(): void {
         const data: PointData = this.#getPointData();
-        // TODO - calculate the size of each point first
-        // TODO -  - get stroke multiplier, calculate diameter, calculate diameter's percentage of length
-        // TODO -  - generate multipliers until the total length is filled
-        // TODO - generate points using the multipliers
-        // TODO -  - calculate x position based on previous point's diameter and current diameter
-
-        const minX: number = this.#EDGE_A.center.x;
-        const maxX: number = this.#EDGE_B.center.x;
-        const maxStrokeMultiplier: number = (Math.min(data.amplitude_A, data.amplitude_B) / 2.0) / CanvasContext.defaultStroke;
-
-        let currentX: number = minX + data.offset;
-        let previousEdge: number = minX;
-        let building: boolean = true;
-
-        while (building) {
-            let strokeMultiplier: number = this.#pointSizeSelector.getChoice();
-            strokeMultiplier = P5Context.p5.constrain(strokeMultiplier, 0, maxStrokeMultiplier);
-            let pointRadius: number = (CanvasContext.defaultStroke * strokeMultiplier) / 2.0;
-
-            if (((currentX - pointRadius) < previousEdge) && !this.#pointOverlap) {
-                currentX = previousEdge + pointRadius;
-            }
-
-            if ((currentX + pointRadius) > maxX) {
-                // const r: number = maxX - currentX;
-                // strokeMultiplier = (r * 2.0) / CanvasContext.defaultStroke;
-                // building = false;
-                break;
-            }
-
-            const pointBase: P5Lib.Vector = new P5Lib.Vector();
-            pointBase.x = currentX;
-            pointBase.y = 0;
-
-            const amp: number = P5Context.p5.map(pointBase.x, minX, maxX, data.amplitude_A, data.amplitude_B);
-            const theta: number = P5Context.p5.map(pointBase.x, minX, maxX, this.#initialTheta, this.#initialTheta + (Math.PI * 2 * this.#frequency));
-
-            const color: Color = this.#colorSelector.getColor();
-
-            const config: PointConfig = {
-                base: pointBase,
-                coordinateMode: CoordinateMode.CANVAS,
-                amplitude: amp,
-                theta: theta,
-                deltaTheta: this.#deltaTheta,
-                color: color,
-                strokeMultiplier: strokeMultiplier
-            };
-
-            const point: Point = new Point(config);
-            this.#POINTS.push(point);
-
-            if (this.#maxPointDiameter < point.diameter) {
-                this.#maxPointDiameter = point.diameter;
-            }
-
-            previousEdge = currentX + (point.diameter / 2.0);
-            currentX = Math.max(previousEdge + data.spacing, currentX + data.spacing);
-
-            if (this.#POINTS.length >= this.#pointTotal) {
-                building = false;
-            }
-        }
+        const leftEdge: number = this.#EDGE_A.center.x;
+        const rightEdge: number = this.#EDGE_B.center.x;
     }
 
     #updatePoints(): void {
-        this.#maxPointDiameter = 0;
-        for (const point of this.#POINTS) {
-            if (this.#maxPointDiameter < point.diameter) {
-                this.#maxPointDiameter = point.diameter;
-            }
-        }
 
-        const data: PointData = this.#getPointData();
-        const minX: number = this.#EDGE_A.center.x;
-        const maxX: number = this.#EDGE_B.center.x;
-        let initialTheta: number = this.#POINTS[0].theta;
-
-        for (const point of this.#POINTS) {
-            const pointX: number = point.base.getX(CoordinateMode.CANVAS);
-            point.amplitude = P5Context.p5.map(pointX, minX, maxX, data.amplitude_A, data.amplitude_B);
-            point.theta = P5Context.p5.map(pointX, minX, maxX, initialTheta, initialTheta + (Math.PI * 2 * this.#frequency));
-            point.canvasRedraw();
-            point.updatePosition();
-        }
     }
+
+    // #buildPoints(): void {
+        // const data: PointData = this.#getPointData();
+        // // TODO - calculate the size of each point first
+        // // TODO -  - get stroke multiplier, calculate diameter, calculate diameter's percentage of length
+        // // TODO -  - generate multipliers until the total length is filled
+        // // TODO - generate points using the multipliers
+        // // TODO -  - calculate x position based on previous point's diameter and current diameter
+        //
+        // const minX: number = this.#EDGE_A.center.x;
+        // const maxX: number = this.#EDGE_B.center.x;
+        // const maxStrokeMultiplier: number = (Math.min(data.amplitude_A, data.amplitude_B) / 2.0) / CanvasContext.defaultStroke;
+        //
+        // let currentX: number = minX + data.offset;
+        // let previousEdge: number = minX;
+        // let building: boolean = true;
+        //
+        // while (building) {
+        //     let strokeMultiplier: number = this.#pointSizeSelector.getChoice();
+        //     strokeMultiplier = P5Context.p5.constrain(strokeMultiplier, 0, maxStrokeMultiplier);
+        //     let pointRadius: number = (CanvasContext.defaultStroke * strokeMultiplier) / 2.0;
+        //
+        //     if (((currentX - pointRadius) < previousEdge) && !this.#pointOverlap) {
+        //         currentX = previousEdge + pointRadius;
+        //     }
+        //
+        //     if ((currentX + pointRadius) > maxX) {
+        //         // const r: number = maxX - currentX;
+        //         // strokeMultiplier = (r * 2.0) / CanvasContext.defaultStroke;
+        //         // building = false;
+        //         break;
+        //     }
+        //
+        //     const pointBase: P5Lib.Vector = new P5Lib.Vector();
+        //     pointBase.x = currentX;
+        //     pointBase.y = 0;
+        //
+        //     const amp: number = P5Context.p5.map(pointBase.x, minX, maxX, data.amplitude_A, data.amplitude_B);
+        //     const theta: number = P5Context.p5.map(pointBase.x, minX, maxX, this.#initialTheta, this.#initialTheta + (Math.PI * 2 * this.#frequency));
+        //
+        //     const color: Color = this.#colorSelector.getColor();
+        //
+        //     const config: PointConfig = {
+        //         base: pointBase,
+        //         coordinateMode: CoordinateMode.CANVAS,
+        //         amplitude: amp,
+        //         theta: theta,
+        //         deltaTheta: this.#deltaTheta,
+        //         color: color,
+        //         strokeMultiplier: strokeMultiplier
+        //     };
+        //
+        //     const point: Point = new Point(config);
+        //     this.#POINTS.push(point);
+        //
+        //     if (this.#maxPointDiameter < point.diameter) {
+        //         this.#maxPointDiameter = point.diameter;
+        //     }
+        //
+        //     previousEdge = currentX + (point.diameter / 2.0);
+        //     currentX = Math.max(previousEdge + data.spacing, currentX + data.spacing);
+        //
+        //     if (this.#POINTS.length >= this.#pointTotal) {
+        //         building = false;
+        //     }
+        // }
+    // }
+
+    // #updatePoints(): void {
+        // this.#maxPointDiameter = 0;
+        // for (const point of this.#POINTS) {
+        //     if (this.#maxPointDiameter < point.diameter) {
+        //         this.#maxPointDiameter = point.diameter;
+        //     }
+        // }
+        //
+        // const data: PointData = this.#getPointData();
+        // const minX: number = this.#EDGE_A.center.x;
+        // const maxX: number = this.#EDGE_B.center.x;
+        // let initialTheta: number = this.#POINTS[0].theta;
+        //
+        // for (const point of this.#POINTS) {
+        //     const pointX: number = point.base.getX(CoordinateMode.CANVAS);
+        //     point.amplitude = P5Context.p5.map(pointX, minX, maxX, data.amplitude_A, data.amplitude_B);
+        //     point.theta = P5Context.p5.map(pointX, minX, maxX, initialTheta, initialTheta + (Math.PI * 2 * this.#frequency));
+        //     point.canvasRedraw();
+        //     point.updatePosition();
+        // }
+    // }
 
     #updateRotation(): void {
         const p5: P5Lib = P5Context.p5;

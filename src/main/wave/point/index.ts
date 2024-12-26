@@ -21,4 +21,5 @@
  * for full license details.
  */
 
+export * from './circle-point';
 export * from './point';
