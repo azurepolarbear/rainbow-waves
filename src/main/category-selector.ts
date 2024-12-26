@@ -30,7 +30,7 @@ export class CategorySelector<Type> {
     #currentCategory: Type;
     #choice: number | undefined = undefined;
 
-    constructor(choices: {category: Type, range: Range}[], sameChoice: boolean) {
+    constructor(choices: { category: Type; range: Range; }[], sameChoice: boolean) {
         for (const choice of choices) {
             this.#CHOICES.set(choice.category, choice.range);
         }
@@ -40,11 +40,13 @@ export class CategorySelector<Type> {
     }
 
     public get currentCategory(): Type | undefined {
-        return this.#currentCategory
+        return this.#currentCategory;
     }
 
-    public set currentCategory(category: Type) {
-        this.#currentCategory = category;
+    public set currentCategory(category: Type | undefined) {
+        if (category) {
+            this.#currentCategory = category;
+        }
     }
 
     public get sameChoice(): boolean {
@@ -90,7 +92,7 @@ export class CategorySelector<Type> {
         const range: Range | undefined = this.#CHOICES.get(this.#currentCategory);
         let result: number = 0;
         if (range) {
-            result =  Random.randomFloatInRange(range);
+            result = Random.randomFloatInRange(range);
         }
 
         return result;

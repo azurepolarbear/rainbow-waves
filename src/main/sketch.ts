@@ -33,7 +33,7 @@ import {
 import '../../assets/styles/sketch.css';
 
 import { HorizontalWaves } from './horizontal-waves';
-import {VerticalWaves} from "./vertical-waves";
+import { VerticalWaves } from './vertical-waves';
 
 function sketch(p5: P5Lib): void {
     p5.setup = (): void => {

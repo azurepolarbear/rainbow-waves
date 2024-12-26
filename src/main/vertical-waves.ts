@@ -21,12 +21,13 @@
  * for full license details.
  */
 
+import P5Lib from 'p5';
+
 import {
     CanvasScreen,
     P5Context,
     ScreenHandler
-} from "@batpb/genart";
-import P5Lib from "p5";
+} from '@batpb/genart';
 
 export class VerticalWaves extends CanvasScreen {
     public constructor() {
@@ -38,13 +39,14 @@ export class VerticalWaves extends CanvasScreen {
         p5.background(0);
     }
 
-    keyPressed(): void {
+    public keyPressed(): void {
         const p5: P5Lib = P5Context.p5;
         if (p5.key === 'a') {
             ScreenHandler.currentScreen = 'horizontal waves';
         }
     }
 
-    mousePressed(): void {
+    public mousePressed(): void {
+        console.log('mouse pressed on vertical waves');
     }
 }

@@ -32,12 +32,12 @@ import {
 } from '@batpb/genart';
 
 export class HorizontalWaves extends CanvasScreen {
-
     constructor() {
         super('horizontal waves');
     }
 
     public override draw(): void {
+        console.log('drawing horizontal waves');
     }
 
     public override keyPressed(): void {

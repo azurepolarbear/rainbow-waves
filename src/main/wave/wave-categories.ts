@@ -30,8 +30,8 @@ export enum PointSize {
 
 export enum WaveDensity {
     LOW = 0, // 1-10 waves
-    MEDIUM = 1, //10-25 waves
-    HIGH = 2 //25-100 waves
+    MEDIUM = 1, // 10-25 waves
+    HIGH = 2 // 25-100 waves
 }
 
 export enum PointAmplitude {
