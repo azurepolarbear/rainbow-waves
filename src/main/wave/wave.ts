@@ -39,11 +39,13 @@ export interface WaveConfig {
     coordinateMode: CoordinateMode;
     edgeA: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
     edgeB: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
+    hasOverlap: boolean;
 }
 
 export class Wave implements CanvasRedrawListener {
     readonly #EDGE_A: WaveEdge;
     readonly #EDGE_B: WaveEdge;
+    readonly #hasOverlap: boolean;
 
     #rotation: number = 0;
 
@@ -52,6 +54,7 @@ export class Wave implements CanvasRedrawListener {
     public constructor(config: WaveConfig) {
         this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
         this.#EDGE_B = new WaveEdge(config.edgeB.top, config.edgeB.bottom, config.coordinateMode);
+        this.#hasOverlap = config.hasOverlap;
         this.#updateRotation();
         this.#buildPoints();
     }

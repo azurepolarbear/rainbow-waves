@@ -22,3 +22,4 @@
  */
 
 export * from './wave';
+export * from './wave-categories';

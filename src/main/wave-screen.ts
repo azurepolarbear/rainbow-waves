@@ -23,9 +23,26 @@
 
 import P5Lib from 'p5';
 
-import { ASPECT_RATIOS, CanvasContext, CanvasScreen, P5Context } from '@batpb/genart';
+import { ASPECT_RATIOS, CanvasContext, CanvasScreen, P5Context, Random, Range } from '@batpb/genart';
+
+import { PointDensity, PointSize } from './wave';
+
+import { CategorySelector } from './category-selector';
 
 export abstract class WaveScreen extends CanvasScreen {
+    static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
+        {category: PointSize.SMALL, range: new Range(1.0 / 250.0, 1.0 / 75.0)},
+        {category: PointSize.MEDIUM, range: new Range(1.0 / 75.0, 1.0 / 25.0)},
+        {category: PointSize.LARGE, range: new Range(1 / 25.0, 1.0 / 4.0)},
+        {category: PointSize.MIXED, range: new Range(1.0 / 250.0, 1.0 / 4.0)}
+    ], Random.randomBoolean());
+
+    static readonly #POINT_DENSITY_SELECTOR: CategorySelector<PointDensity> = new CategorySelector<PointDensity>([
+        {category: PointDensity.LOW, range: new Range(4, 25)},
+        {category: PointDensity.MEDIUM, range: new Range(25, 75)},
+        {category: PointDensity.HIGH, range: new Range(75, 250)},
+    ], Random.randomBoolean());
+
     public get sameWaveAmplitude(): boolean {
         return true;
     }
@@ -40,6 +57,14 @@ export abstract class WaveScreen extends CanvasScreen {
 
     public get sameWaveFrequency(): boolean {
         return true;
+    }
+
+    public static get POINT_DENSITY_SELECTOR(): CategorySelector<PointDensity> {
+        return WaveScreen.#POINT_DENSITY_SELECTOR;
+    }
+
+    public static get POINT_SIZE_SELECTOR(): CategorySelector<PointSize> {
+        return WaveScreen.#POINT_SIZE_SELECTOR;
     }
 
     public keyPressed(): void {
