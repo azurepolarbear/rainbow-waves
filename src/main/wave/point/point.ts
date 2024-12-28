@@ -30,6 +30,9 @@ export interface PointConfig {
     waveRatio_end: number;
     base: P5Lib.Vector;
     diameter: number;
+    theta: number;
+    deltaTheta: number;
+    amplitude: number;
 }
 
 /**
@@ -40,15 +43,21 @@ export class Point {
     #waveRatio_start: number;
     #waveRatio_end: number;
     #base: P5Lib.Vector;
+    #position: P5Lib.Vector;
     #diameter: number;
-    // #theta: number = 0;
-    // #deltaTheta: number = 0.01;
+    #theta: number;
+    #deltaTheta: number;
+    #amplitude: number;
 
     public constructor(config: PointConfig) {
         this.#base = config.base;
+        this.#position = this.#base.copy();
         this.#diameter = config.diameter;
         this.#waveRatio_start = config.waveRatio_start;
         this.#waveRatio_end = config.waveRatio_end;
+        this.#theta = config.theta;
+        this.#deltaTheta = config.deltaTheta;
+        this.#amplitude = config.amplitude;
     }
 
     public get waveRatio_start(): number {
@@ -72,7 +81,12 @@ export class Point {
         p5.fill(255, 0, 0);
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.stroke(0, 0, 255);
-        p5.ellipse(this.#base.x, this.#base.y, this.#diameter, this.#diameter);
+        p5.ellipse(this.#position.x, this.#position.y, this.#diameter, this.#diameter);
+    }
+
+    public move(): void {
+        this.#theta += this.#deltaTheta;
+        this.#updatePosition();
     }
 
     public updateBase(base: P5Lib.Vector): void {
@@ -81,5 +95,13 @@ export class Point {
 
     public updateDiameter(diameter: number): void {
         this.#diameter = diameter;
+    }
+
+    #updatePosition(): void {
+        this.#position.set(this.#base.x, this.#calculateY());
+    }
+
+    #calculateY(): number {
+        return (this.#base.y + (this.#amplitude * Math.sin(this.#theta)));
     }
 }

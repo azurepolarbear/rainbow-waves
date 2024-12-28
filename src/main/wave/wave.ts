@@ -72,6 +72,12 @@ export class Wave implements CanvasRedrawListener {
         p5.pop();
     }
 
+    public move(): void {
+        this.#points.forEach((point: Point): void => {
+           point.move();
+        });
+    }
+
     #updateRotation(): void {
         const p5: P5Lib = P5Context.p5;
         const center_A: P5Lib.Vector = this.#EDGE_A.center;
@@ -104,7 +110,10 @@ export class Wave implements CanvasRedrawListener {
                 waveRatio_start: waveRatio_start,
                 waveRatio_end: waveRatio_end,
                 base: base,
-                diameter: diameter
+                diameter: diameter,
+                theta: 0,
+                deltaTheta: 0.005,
+                amplitude: 5
             }
 
             this.#points.push(new Point(pointConfig));

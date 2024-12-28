@@ -71,11 +71,14 @@ export class WaveTesting extends WaveScreen {
 
         this.#horizontalWave.draw();
         this.#horizontalWave.debug_drawFrame(255);
+        this.#horizontalWave.move();
 
         this.#verticalWave.draw();
         this.#verticalWave.debug_drawFrame(255);
+        this.#verticalWave.move();
 
         this.#diagonalWave.draw();
         this.#diagonalWave.debug_drawFrame(255);
+        this.#diagonalWave.move();
     }
 }
