@@ -23,13 +23,25 @@
 
 export enum PointSize {
     SMALL = 'small', // 1 / 250 - 1 / 75
-    MEDIUM = 'medium', // 1 / 100 - 1 / 15
-    LARGE = 'large', // 1 / 20 - 1 / 4
+    MEDIUM = 'medium', // 1 / 75 - 1 / 25
+    LARGE = 'large', // 1 / 25 - 1 / 4
     MIXED = 'mixed' // 1 / 250 - 1 / 4
+}
+
+export enum PointDensity {
+    LOW = 0, // 4-25 points
+    MEDIUM = 1, // 25-75 points
+    HIGH = 2 // 75-250 points
 }
 
 export enum WaveDensity {
     LOW = 0, // 1-10 waves
     MEDIUM = 1, // 10-25 waves
     HIGH = 2 // 25-100 waves
+}
+
+export enum PointType {
+    CIRCLE = 'circle',
+    SQUARE = 'square',
+    MIXED = 'mixed'
 }
