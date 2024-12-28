@@ -33,8 +33,3 @@ export enum WaveDensity {
     MEDIUM = 1, // 10-25 waves
     HIGH = 2 // 25-100 waves
 }
-
-export enum PointAmplitude {
-    CENTER = 0,
-    EDGE = 1
-}

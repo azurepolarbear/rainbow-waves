@@ -26,6 +26,22 @@ import P5Lib from 'p5';
 import { ASPECT_RATIOS, CanvasContext, CanvasScreen, P5Context } from '@batpb/genart';
 
 export abstract class WaveScreen extends CanvasScreen {
+    public get sameWaveAmplitude(): boolean {
+        return true;
+    }
+
+    public get sameWaveDeltaTheta(): boolean {
+        return true;
+    }
+
+    public get sameWaveInitialTheta(): boolean {
+        return true;
+    }
+
+    public get sameWaveFrequency(): boolean {
+        return true;
+    }
+
     public keyPressed(): void {
         const p5: P5Lib = P5Context.p5;
 
