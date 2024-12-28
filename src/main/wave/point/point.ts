@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 brittni and the polar bear LLC.
+ * Copyright (C) 2015-2024 brittni and the polar bear LLC.
  *
  * This file is a part of azurepolarbear's rainbow waves algorithmic art project,
  * which is released under the GNU Affero General Public License, Version 3.0.
@@ -23,28 +23,26 @@
 
 import P5Lib from 'p5';
 
-import {CanvasContext, CanvasRedrawListener, CoordinateMode, P5Context} from '@batpb/genart';
+import { CanvasContext, P5Context } from '@batpb/genart';
 
 export interface PointConfig {
-    base: P5Lib.Vector;
-    diameter: number;
-    coordinateMode: CoordinateMode;
     waveRatio_start: number;
     waveRatio_end: number;
+    base: P5Lib.Vector;
+    diameter: number;
 }
 
 /**
  * NOTES:
  * - The Point class assumes that it's base is on a line starting at (0, 0), and ending at (waveLength, 0).
  */
-export class Point implements CanvasRedrawListener {
+export class Point {
+    #waveRatio_start: number;
+    #waveRatio_end: number;
     #base: P5Lib.Vector;
     #diameter: number;
     // #theta: number = 0;
     // #deltaTheta: number = 0.01;
-
-    #waveRatio_start: number;
-    #waveRatio_end: number;
 
     public constructor(config: PointConfig) {
         this.#base = config.base;
@@ -62,11 +60,11 @@ export class Point implements CanvasRedrawListener {
     }
 
     public get waveRatio_center(): number {
-        return (this.#waveRatio_start + this.#waveRatio_end) / 2;
+        return (this.waveRatio_start + this.waveRatio_end) / 2;
     }
 
     public get waveRatio_length(): number {
-        return Math.abs(this.#waveRatio_end - this.#waveRatio_start);
+        return Math.abs(this.waveRatio_end - this.waveRatio_start);
     }
 
     public draw(): void {
@@ -75,9 +73,6 @@ export class Point implements CanvasRedrawListener {
         p5.strokeWeight(CanvasContext.defaultStroke);
         p5.stroke(0, 0, 255);
         p5.ellipse(this.#base.x, this.#base.y, this.#diameter, this.#diameter);
-    }
-
-    public canvasRedraw(): void {
     }
 
     public updateBase(base: P5Lib.Vector): void {
