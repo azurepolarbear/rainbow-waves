@@ -34,6 +34,16 @@ export enum PointDensity {
     HIGH = 2 // 75-250 points
 }
 
+export enum WaveFill {
+    FILL = 'fill',
+    OVERLAP = 'overlap'
+}
+
+export enum AmplitudeType {
+    EDGE = 'edge',
+    CENTER = 'center'
+}
+
 export enum WaveDensity {
     LOW = 0, // 1-10 waves
     MEDIUM = 1, // 10-25 waves

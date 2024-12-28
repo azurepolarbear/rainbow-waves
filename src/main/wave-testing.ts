@@ -23,10 +23,10 @@
 
 import P5Lib from 'p5';
 
-import { CoordinateMode, P5Context } from '@batpb/genart';
+import {CoordinateMode, P5Context} from '@batpb/genart';
 
-import { Wave, WaveConfig } from './wave';
-import { WaveScreen } from './wave-screen';
+import {AmplitudeType, PointSize, Wave, WaveConfig, WaveFill} from './wave';
+import {WaveScreen} from './wave-screen';
 
 export class WaveTesting extends WaveScreen {
     #horizontalWave: Wave;
@@ -37,10 +37,16 @@ export class WaveTesting extends WaveScreen {
         super('wave testing');
         const p5: P5Lib = P5Context.p5;
 
+        WaveScreen.POINT_SIZE_SELECTOR.currentCategory = PointSize.MEDIUM;
+        WaveScreen.POINT_SIZE_SELECTOR.sameChoice = false;
+
         const hConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0, 0.3), bottom: p5.createVector(0, 0.7) },
-            edgeB: { top: p5.createVector(1, 0.4), bottom: p5.createVector(1, 0.6) }
+            edgeB: { top: p5.createVector(1, 0.4), bottom: p5.createVector(1, 0.6) },
+            waveFill: WaveFill.FILL,
+            amplitudeType: AmplitudeType.CENTER,
+            pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
         };
 
         this.#horizontalWave = new Wave(hConfig);
@@ -49,7 +55,10 @@ export class WaveTesting extends WaveScreen {
         const vConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0.4, 0), bottom: p5.createVector(0.6, 0) },
-            edgeB: { top: p5.createVector(0.4, 1), bottom: p5.createVector(0.6, 1) }
+            edgeB: { top: p5.createVector(0.4, 1), bottom: p5.createVector(0.6, 1) },
+            waveFill: WaveFill.FILL,
+            amplitudeType: AmplitudeType.EDGE,
+            pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
         };
 
         this.#verticalWave = new Wave(vConfig);
@@ -58,7 +67,10 @@ export class WaveTesting extends WaveScreen {
         const dConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0, 0.1), bottom: p5.createVector(0.1, 0) },
-            edgeB: { top: p5.createVector(0.9, 1), bottom: p5.createVector(1, 0.9) }
+            edgeB: { top: p5.createVector(0.9, 1), bottom: p5.createVector(1, 0.9) },
+            waveFill: WaveFill.FILL,
+            amplitudeType: AmplitudeType.EDGE,
+            pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
         };
 
         this.#diagonalWave = new Wave(dConfig);

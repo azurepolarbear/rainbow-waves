@@ -72,6 +72,14 @@ export class CategorySelector<Type> {
         this.#choice = undefined;
     }
 
+    public getCurrentCategoryRange(): Range | undefined {
+        if (this.#currentCategory) {
+            return this.#CHOICES.get(this.#currentCategory);
+        } else {
+            return undefined;
+        }
+    }
+
     public getChoice(): number {
         let result: number;
 
