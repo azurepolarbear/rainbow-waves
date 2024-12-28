@@ -60,20 +60,32 @@ export class Point {
         this.#amplitude = config.amplitude;
     }
 
-    public get waveRatio_start(): number {
+    public getWaveRatioStart(): number {
         return this.#waveRatio_start;
     }
 
-    public get waveRatio_end(): number {
+    public getWaveRatioEnd(): number {
         return this.#waveRatio_end;
     }
 
-    public get waveRatio_center(): number {
-        return (this.waveRatio_start + this.waveRatio_end) / 2;
+    public getWaveRatioCenter(): number {
+        return (this.#waveRatio_start + this.#waveRatio_end) / 2;
     }
 
-    public get waveRatio_length(): number {
-        return Math.abs(this.waveRatio_end - this.waveRatio_start);
+    public getWaveRatioLength(): number {
+        return Math.abs(this.#waveRatio_end - this.#waveRatio_start);
+    }
+
+    public updateAmplitude(amplitude: number): void {
+        this.#amplitude = amplitude;
+    }
+
+    public updateBase(base: P5Lib.Vector): void {
+        this.#base.set(base);
+    }
+
+    public updateDiameter(diameter: number): void {
+        this.#diameter = diameter;
     }
 
     public draw(): void {
@@ -87,14 +99,6 @@ export class Point {
     public move(): void {
         this.#theta += this.#deltaTheta;
         this.#updatePosition();
-    }
-
-    public updateBase(base: P5Lib.Vector): void {
-        this.#base.set(base);
-    }
-
-    public updateDiameter(diameter: number): void {
-        this.#diameter = diameter;
     }
 
     #updatePosition(): void {

@@ -29,6 +29,12 @@ import { Point, PointConfig } from './point';
 
 import { WaveEdge } from './wave-edge';
 
+interface WaveData {
+    amplitude_A: number;
+    amplitude_B: number;
+    length: number;
+}
+
 export interface WaveConfig {
     coordinateMode: CoordinateMode;
     edgeA: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
@@ -92,28 +98,29 @@ export class Wave implements CanvasRedrawListener {
     #buildPoints(): void {
         const p5: P5Lib = P5Context.p5;
         const pointTotal: number = 50;
-        const center_A: P5Lib.Vector = this.#EDGE_A.center;
-        const center_B: P5Lib.Vector = this.#EDGE_B.center;
-        const dist: number = center_A.dist(center_B);
+        const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
-        const end: P5Lib.Vector = p5.createVector(dist, 0);
+        const end: P5Lib.Vector = p5.createVector(data.length, 0);
+        let theta: number = 0;
 
         for (let i: number = 0; i < pointTotal; i++) {
             const waveRatio_start: number = i / pointTotal;
             const waveRatio_end: number = (i + 1) / pointTotal;
             const waveRatio_center: number = (waveRatio_start + waveRatio_end) / 2;
             const ratioLen: number = waveRatio_end - waveRatio_start;
-            const diameter: number = dist * ratioLen;
+            const diameter: number = data.length * ratioLen;
             const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, waveRatio_center);
+            const pointTheta: number = theta + (waveRatio_center * (Math.PI * 2));
+            const amplitude: number = p5.map(waveRatio_center, 0, 1, data.amplitude_A, data.amplitude_B) - (diameter / 2.0);
 
             const pointConfig: PointConfig = {
                 waveRatio_start: waveRatio_start,
                 waveRatio_end: waveRatio_end,
                 base: base,
                 diameter: diameter,
-                theta: 0,
-                deltaTheta: 0.005,
-                amplitude: 5
+                theta: pointTheta,
+                deltaTheta: 0.01,
+                amplitude: amplitude
             };
 
             this.#points.push(new Point(pointConfig));
@@ -122,18 +129,32 @@ export class Wave implements CanvasRedrawListener {
 
     #updatePoints(): void {
         const p5: P5Lib = P5Context.p5;
-        const center_A: P5Lib.Vector = this.#EDGE_A.center;
-        const center_B: P5Lib.Vector = this.#EDGE_B.center;
-        const dist: number = center_A.dist(center_B);
+        const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
-        const end: P5Lib.Vector = p5.createVector(dist, 0);
+        const end: P5Lib.Vector = p5.createVector(data.length, 0);
 
         this.#points.forEach((point: Point): void => {
-            const diameter: number = dist * point.waveRatio_length;
-            const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.waveRatio_center);
+            const diameter: number = data.length * point.getWaveRatioLength();
+            const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.getWaveRatioCenter());
+            const amplitude: number = p5.map(point.getWaveRatioCenter(), 0, 1, data.amplitude_A, data.amplitude_B) - (diameter / 2.0);
             point.updateBase(base);
             point.updateDiameter(diameter);
+            point.updateAmplitude(amplitude);
         });
+    }
+
+    #getWaveData(): WaveData {
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const amplitude_A: number = this.#EDGE_A.length / 2.0;
+        const amplitude_B: number = this.#EDGE_B.length / 2.0;
+        const length: number = center_A.dist(center_B);
+
+        return {
+            amplitude_A: amplitude_A,
+            amplitude_B: amplitude_B,
+            length: length
+        }
     }
 
     public debug_drawFrame(border: number): void {
