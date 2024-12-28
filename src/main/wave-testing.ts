@@ -44,8 +44,7 @@ export class WaveTesting extends WaveScreen {
         };
 
         this.#horizontalWave = new Wave(hConfig);
-
-        console.log(this.#horizontalWave);
+        this.addRedrawListener(this.#horizontalWave);
 
         const vConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
@@ -54,8 +53,7 @@ export class WaveTesting extends WaveScreen {
         };
 
         this.#verticalWave = new Wave(vConfig);
-
-        console.log(this.#verticalWave);
+        this.addRedrawListener(this.#verticalWave);
 
         const dConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
@@ -64,8 +62,7 @@ export class WaveTesting extends WaveScreen {
         };
 
         this.#diagonalWave = new Wave(dConfig);
-
-        console.log(this.#diagonalWave);
+        this.addRedrawListener(this.#diagonalWave);
     }
 
     public draw(): void {

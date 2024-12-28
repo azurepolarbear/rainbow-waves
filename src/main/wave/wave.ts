@@ -23,7 +23,7 @@
 
 import P5Lib from 'p5';
 
-import { CanvasContext, CoordinateMode, P5Context } from '@batpb/genart';
+import { CanvasContext, CanvasRedrawListener, CoordinateMode, P5Context } from '@batpb/genart';
 import { WaveEdge } from './wave-edge';
 
 export interface WaveConfig {
@@ -32,16 +32,25 @@ export interface WaveConfig {
     edgeB: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
 }
 
-export class Wave {
+export class Wave implements CanvasRedrawListener {
     readonly #EDGE_A: WaveEdge;
     readonly #EDGE_B: WaveEdge;
 
     #rotation: number = 0;
 
-    constructor(config: WaveConfig) {
+    public constructor(config: WaveConfig) {
         this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
         this.#EDGE_B = new WaveEdge(config.edgeB.top, config.edgeB.bottom, config.coordinateMode);
         this.#updateRotation();
+    }
+
+    public canvasRedraw(): void {
+        this.#EDGE_A.remap();
+        this.#EDGE_B.remap();
+        this.#updateRotation();
+    }
+
+    public draw(): void {
     }
 
     #updateRotation(): void {
@@ -52,12 +61,10 @@ export class Wave {
         p5.push();
         p5.translate(center_A.x, center_A.y);
         this.#rotation = translated_B.heading();
-        console.log(this.#rotation);
-        console.log(P5Lib.Vector.angleBetween(this.#EDGE_A.center, this.#EDGE_B.center));
         p5.pop();
     }
 
-    debug_drawFrame(border: number): void {
+    public debug_drawFrame(border: number): void {
         const p5: P5Lib = P5Context.p5;
         p5.stroke(border);
         p5.strokeWeight(CanvasContext.defaultStroke);
