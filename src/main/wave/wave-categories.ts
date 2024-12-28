@@ -22,10 +22,10 @@
  */
 
 export enum PointSize {
-    SMALL = 'small',
-    MEDIUM = 'medium',
-    LARGE = 'large',
-    MIXED = 'mixed'
+    SMALL = 'small', // 1 / 250 - 1 / 75
+    MEDIUM = 'medium', // 1 / 100 - 1 / 15
+    LARGE = 'large', // 1 / 20 - 1 / 4
+    MIXED = 'mixed' // 1 / 250 - 1 / 4
 }
 
 export enum WaveDensity {

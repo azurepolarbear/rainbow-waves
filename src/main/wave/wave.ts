@@ -97,7 +97,7 @@ export class Wave implements CanvasRedrawListener {
 
     #buildPoints(): void {
         const p5: P5Lib = P5Context.p5;
-        const pointTotal: number = 50;
+        const pointTotal: number = 4;
         const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
@@ -108,10 +108,17 @@ export class Wave implements CanvasRedrawListener {
             const waveRatio_end: number = (i + 1) / pointTotal;
             const waveRatio_center: number = (waveRatio_start + waveRatio_end) / 2;
             const ratioLen: number = waveRatio_end - waveRatio_start;
-            const diameter: number = data.length * ratioLen;
+            let diameter: number = data.length * ratioLen;
             const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, waveRatio_center);
             const pointTheta: number = theta + (waveRatio_center * (Math.PI * 2));
-            const amplitude: number = p5.map(waveRatio_center, 0, 1, data.amplitude_A, data.amplitude_B) - (diameter / 2.0);
+            const amplitudeMap: number = p5.map(waveRatio_center, 0, 1, data.amplitude_A, data.amplitude_B);
+            let amplitude: number = amplitudeMap - (diameter / 2.0);
+
+            if (Math.ceil(amplitude) < 0) {
+                console.log('amplitude is negative');
+                amplitude = 0;
+                diameter = amplitudeMap * 2;
+            }
 
             const pointConfig: PointConfig = {
                 waveRatio_start: waveRatio_start,
@@ -134,9 +141,17 @@ export class Wave implements CanvasRedrawListener {
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
 
         this.#points.forEach((point: Point): void => {
-            const diameter: number = data.length * point.getWaveRatioLength();
+            let diameter: number = data.length * point.getWaveRatioLength();
             const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.getWaveRatioCenter());
-            const amplitude: number = p5.map(point.getWaveRatioCenter(), 0, 1, data.amplitude_A, data.amplitude_B) - (diameter / 2.0);
+            const amplitudeMap: number = p5.map(point.getWaveRatioCenter(), 0, 1, data.amplitude_A, data.amplitude_B);
+            let amplitude: number = amplitudeMap - (diameter / 2.0);
+
+            if (Math.ceil(amplitude) < 0) {
+                console.log('amplitude is negative');
+                amplitude = 0;
+                diameter = amplitudeMap * 2;
+            }
+
             point.updateBase(base);
             point.updateDiameter(diameter);
             point.updateAmplitude(amplitude);

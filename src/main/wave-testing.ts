@@ -39,7 +39,7 @@ export class WaveTesting extends WaveScreen {
 
         const hConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
-            edgeA: { top: p5.createVector(0, 0.4), bottom: p5.createVector(0, 0.6) },
+            edgeA: { top: p5.createVector(0, 0.3), bottom: p5.createVector(0, 0.7) },
             edgeB: { top: p5.createVector(1, 0.4), bottom: p5.createVector(1, 0.6) }
         };
 
