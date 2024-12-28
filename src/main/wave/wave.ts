@@ -74,7 +74,7 @@ export class Wave implements CanvasRedrawListener {
 
     public move(): void {
         this.#points.forEach((point: Point): void => {
-           point.move();
+            point.move();
         });
     }
 
@@ -114,7 +114,7 @@ export class Wave implements CanvasRedrawListener {
                 theta: 0,
                 deltaTheta: 0.005,
                 amplitude: 5
-            }
+            };
 
             this.#points.push(new Point(pointConfig));
         }
