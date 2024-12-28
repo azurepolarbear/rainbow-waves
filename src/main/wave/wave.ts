@@ -115,7 +115,6 @@ export class Wave implements CanvasRedrawListener {
             let amplitude: number = amplitudeMap - (diameter / 2.0);
 
             if (Math.ceil(amplitude) < 0) {
-                console.log('amplitude is negative');
                 amplitude = 0;
                 diameter = amplitudeMap * 2;
             }
@@ -147,7 +146,6 @@ export class Wave implements CanvasRedrawListener {
             let amplitude: number = amplitudeMap - (diameter / 2.0);
 
             if (Math.ceil(amplitude) < 0) {
-                console.log('amplitude is negative');
                 amplitude = 0;
                 diameter = amplitudeMap * 2;
             }
