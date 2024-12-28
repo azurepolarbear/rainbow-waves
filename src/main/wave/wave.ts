@@ -21,10 +21,74 @@
  * for full license details.
  */
 
-export interface WaveConfig {
+import P5Lib from 'p5';
 
+import { CanvasContext, CoordinateMode, P5Context } from '@batpb/genart';
+import { WaveEdge } from './wave-edge';
+
+export interface WaveConfig {
+    coordinateMode: CoordinateMode;
+    edgeA: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
+    edgeB: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
 }
 
-export abstract class Wave {
+export class Wave {
+    readonly #EDGE_A: WaveEdge;
+    readonly #EDGE_B: WaveEdge;
 
+    #rotation: number = 0;
+
+    constructor(config: WaveConfig) {
+        this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
+        this.#EDGE_B = new WaveEdge(config.edgeB.top, config.edgeB.bottom, config.coordinateMode);
+        this.#updateRotation();
+    }
+
+    #updateRotation(): void {
+        const p5: P5Lib = P5Context.p5;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const translated_B: P5Lib.Vector = P5Lib.Vector.sub(this.#EDGE_B.center, center_A);
+
+        p5.push();
+        p5.translate(center_A.x, center_A.y);
+        this.#rotation = translated_B.heading();
+        console.log(this.#rotation);
+        console.log(P5Lib.Vector.angleBetween(this.#EDGE_A.center, this.#EDGE_B.center));
+        p5.pop();
+    }
+
+    debug_drawFrame(border: number): void {
+        const p5: P5Lib = P5Context.p5;
+        p5.stroke(border);
+        p5.strokeWeight(CanvasContext.defaultStroke);
+        p5.noFill();
+        p5.quad(
+            this.#EDGE_A.top.x,
+            this.#EDGE_A.top.y,
+            this.#EDGE_B.top.x,
+            this.#EDGE_B.top.y,
+            this.#EDGE_B.bottom.x,
+            this.#EDGE_B.bottom.y,
+            this.#EDGE_A.bottom.x,
+            this.#EDGE_A.bottom.y
+        );
+
+        p5.strokeWeight(CanvasContext.defaultStroke * 5);
+        p5.stroke(0, 255, 0);
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        p5.point(center_A.x, center_A.y);
+
+        p5.stroke(0, 0, 255);
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        p5.point(center_B.x, center_B.y);
+
+        p5.strokeWeight(CanvasContext.defaultStroke);
+        p5.stroke(0, 255, 255);
+        const dist: number = center_A.dist(center_B);
+        p5.push();
+        p5.translate(center_A.x, center_A.y);
+        p5.rotate(this.#rotation);
+        p5.line(0, 0, dist, 0);
+        p5.pop();
+    }
 }

@@ -34,6 +34,7 @@ import '../../assets/styles/sketch.css';
 
 import { HorizontalWaves } from './horizontal-waves';
 import { VerticalWaves } from './vertical-waves';
+import { WaveTesting } from './wave-testing';
 
 function sketch(p5: P5Lib): void {
     p5.setup = (): void => {
@@ -42,11 +43,15 @@ function sketch(p5: P5Lib): void {
 
         const horizontalScreen: HorizontalWaves = new HorizontalWaves();
         ScreenHandler.addScreen(horizontalScreen);
-        ScreenHandler.currentScreen = horizontalScreen.NAME;
+        // ScreenHandler.currentScreen = horizontalScreen.NAME;
 
         const verticalScreen: VerticalWaves = new VerticalWaves();
         ScreenHandler.addScreen(verticalScreen);
         // ScreenHandler.currentScreen = verticalScreen.NAME;
+
+        const waveTestingScreen: HorizontalWaves = new WaveTesting();
+        ScreenHandler.addScreen(waveTestingScreen);
+        ScreenHandler.currentScreen = waveTestingScreen.NAME;
     };
 
     p5.draw = (): void => {

@@ -31,7 +31,7 @@ export class WaveEdge {
 
     public constructor(top: P5Lib.Vector, bottom: P5Lib.Vector, mode: CoordinateMode) {
         this.#top = new Coordinate();
-        this.#top.setPosition(top, mode)
+        this.#top.setPosition(top, mode);
         this.#bottom = new Coordinate();
         this.#bottom.setPosition(bottom, mode);
     }

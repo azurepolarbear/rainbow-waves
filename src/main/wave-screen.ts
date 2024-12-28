@@ -23,25 +23,10 @@
 
 import P5Lib from 'p5';
 
-import {
-    ASPECT_RATIOS,
-    CanvasContext,
-    CanvasScreen,
-    P5Context,
-    ScreenHandler
-} from '@batpb/genart';
+import { ASPECT_RATIOS, CanvasContext, CanvasScreen, P5Context } from '@batpb/genart';
 
-export class HorizontalWaves extends CanvasScreen {
-    constructor() {
-        super('horizontal waves');
-    }
-
-    public override draw(): void {
-        const p5: P5Lib = P5Context.p5;
-        p5.background(0);
-    }
-
-    public override keyPressed(): void {
+export abstract class WaveScreen extends CanvasScreen {
+    public keyPressed(): void {
         const p5: P5Lib = P5Context.p5;
 
         if (p5.key === '1') {
@@ -60,14 +45,12 @@ export class HorizontalWaves extends CanvasScreen {
             CanvasContext.updateResolution(1080);
         } else if (p5.key === '0') {
             console.log(`framerate = ${p5.frameRate()}`);
-        } else if (p5.key === 'a') {
-            ScreenHandler.currentScreen = 'vertical waves';
         }
 
         p5.background(0);
     }
 
-    public override mousePressed(): void {
-        console.log('mouse pressed');
+    public mousePressed(): void {
+        console.log('mousePressed() placeholder');
     }
 }
