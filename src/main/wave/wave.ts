@@ -25,6 +25,13 @@ import P5Lib from 'p5';
 
 import { CanvasContext, CanvasRedrawListener, CoordinateMode, P5Context } from '@batpb/genart';
 import { WaveEdge } from './wave-edge';
+import {Point as P, PointConfig} from './point';
+
+interface Point {
+    waveRatio_start: number;
+    waveRatio_end: number;
+    waveRatio_center: number;
+}
 
 export interface WaveConfig {
     coordinateMode: CoordinateMode;
@@ -38,19 +45,48 @@ export class Wave implements CanvasRedrawListener {
 
     #rotation: number = 0;
 
+    #points: Point[] = [];
+
+    #ps: P[] = [];
+
     public constructor(config: WaveConfig) {
         this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
         this.#EDGE_B = new WaveEdge(config.edgeB.top, config.edgeB.bottom, config.coordinateMode);
         this.#updateRotation();
+        this.#buildPoints();
     }
 
     public canvasRedraw(): void {
         this.#EDGE_A.remap();
         this.#EDGE_B.remap();
         this.#updateRotation();
+        this.#updatePoints();
     }
 
     public draw(): void {
+        const p5: P5Lib = P5Context.p5;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const dist: number = center_A.dist(center_B);
+
+        const start: P5Lib.Vector = p5.createVector(0, 0);
+        const end: P5Lib.Vector = p5.createVector(dist, 0);
+
+        p5.push();
+        p5.translate(center_A.x, center_A.y);
+        p5.rotate(this.#rotation);
+        this.#points.forEach((point: Point) => {
+            const pos: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.waveRatio_center);
+            p5.stroke(255, 0, 0);
+            p5.strokeWeight(CanvasContext.defaultStroke * 10);
+            p5.point(pos.x, pos.y);
+        });
+
+        this.#ps.forEach((point: P): void => {
+            point.draw();
+        });
+
+        p5.pop();
     }
 
     #updateRotation(): void {
@@ -62,6 +98,51 @@ export class Wave implements CanvasRedrawListener {
         p5.translate(center_A.x, center_A.y);
         this.#rotation = translated_B.heading();
         p5.pop();
+    }
+
+    #buildPoints(): void {
+        const p5: P5Lib = P5Context.p5;
+        const pointTotal: number = 50;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const dist: number = center_A.dist(center_B);
+        const start: P5Lib.Vector = p5.createVector(0, 0);
+        const end: P5Lib.Vector = p5.createVector(dist, 0);
+
+        for (let i: number = 0; i < pointTotal; i++) {
+            const waveRatio_start: number = i / pointTotal;
+            const waveRatio_end: number = (i + 1) / pointTotal;
+            const waveRatio_center: number = (waveRatio_start + waveRatio_end) / 2;
+            const ratioLen: number = waveRatio_end - waveRatio_start;
+            const diameter: number = dist * ratioLen;
+            const pos: P5Lib.Vector = P5Lib.Vector.lerp(start, end, waveRatio_center);
+
+            const pointConfig: PointConfig = {
+                waveRatio_start: waveRatio_start,
+                waveRatio_end: waveRatio_end,
+                base: pos,
+                diameter: diameter,
+                coordinateMode: CoordinateMode.CANVAS
+            }
+
+            this.#ps.push(new P(pointConfig));
+        }
+    }
+
+    #updatePoints(): void {
+        const p5: P5Lib = P5Context.p5;
+        const center_A: P5Lib.Vector = this.#EDGE_A.center;
+        const center_B: P5Lib.Vector = this.#EDGE_B.center;
+        const dist: number = center_A.dist(center_B);
+        const start: P5Lib.Vector = p5.createVector(0, 0);
+        const end: P5Lib.Vector = p5.createVector(dist, 0);
+
+        this.#ps.forEach((point: P): void => {
+            const diameter: number = dist * point.waveRatio_length;
+            const pos: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.waveRatio_center);
+            point.updateBase(pos);
+            point.updateDiameter(diameter);
+        });
     }
 
     public debug_drawFrame(border: number): void {

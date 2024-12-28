@@ -68,8 +68,14 @@ export class WaveTesting extends WaveScreen {
     public draw(): void {
         const p5: P5Lib = P5Context.p5;
         p5.background(0);
+
+        this.#horizontalWave.draw();
         this.#horizontalWave.debug_drawFrame(255);
+
+        this.#verticalWave.draw();
         this.#verticalWave.debug_drawFrame(255);
+
+        this.#diagonalWave.draw();
         this.#diagonalWave.debug_drawFrame(255);
     }
 }
