@@ -33,6 +33,13 @@ import {ScreenName} from "./screen-name";
 export class HorizontalWaves extends WaveScreen {
     constructor() {
         super(ScreenName.HORIZONTAL_WAVES);
+        // TODO - wave density categories
+        // const minWaves: number = 1;
+        // const maxWaves: number = 20;
+
+        // constant amplitude?
+
+        // constant frequency?
     }
 
     public override draw(): void {

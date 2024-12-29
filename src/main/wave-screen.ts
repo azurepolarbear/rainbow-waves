@@ -34,7 +34,7 @@ import {
     ScreenHandler
 } from '@batpb/genart';
 
-import { PointDensity, PointSize } from './wave';
+import {PointDensity, PointSize, Wave} from './wave';
 
 import { CategorySelector } from './category-selector';
 import {ScreenName} from "./screen-name";
@@ -53,7 +53,15 @@ export abstract class WaveScreen extends CanvasScreen {
         {category: PointDensity.HIGH, range: new Range(75, 250)},
     ], Random.randomBoolean());
 
+    readonly #WAVES: Wave[] = [];
+
     #background: Color;
+
+    #constantPointSizeCategory: boolean = true;
+    #constantPointSize: boolean = true;
+
+    #constantPointDensityCategory: boolean = true;
+    #constantPointDensity: boolean = true;
 
     protected constructor(name: string) {
         super(name);
@@ -82,6 +90,38 @@ export abstract class WaveScreen extends CanvasScreen {
 
     public get sameWaveFrequency(): boolean {
         return true;
+    }
+
+    protected get constantPointDensityCategory(): boolean {
+        return this.#constantPointDensityCategory;
+    }
+
+    protected set constantPointDensityCategory(value: boolean) {
+        this.#constantPointDensityCategory = value;
+    }
+
+    protected get constantPointDensity(): boolean {
+        return this.#constantPointDensity;
+    }
+
+    protected set constantPointDensity(value: boolean) {
+        this.#constantPointDensity = value;
+    }
+
+    protected get constantPointSizeCategory(): boolean {
+        return this.#constantPointSizeCategory;
+    }
+
+    protected set constantPointSizeCategory(value: boolean) {
+        this.#constantPointSizeCategory = value;
+    }
+
+    protected get constantPointSize(): boolean {
+        return this.#constantPointSize;
+    }
+
+    protected set constantPointSize(value: boolean) {
+        this.#constantPointSize = value;
     }
 
     public override activate(): void {
@@ -125,8 +165,46 @@ export abstract class WaveScreen extends CanvasScreen {
         console.log('mousePressed() placeholder');
     }
 
+    protected updatePointSizeSelector(): void {
+        if (!this.constantPointSizeCategory) {
+            WaveScreen.#POINT_SIZE_SELECTOR.setRandomCategory();
+        }
+
+        if (!this.constantPointSize) {
+            WaveScreen.#POINT_SIZE_SELECTOR.resetChoice();
+        }
+    }
+
+    protected updatePointDensitySelector(): void {
+        if (!this.constantPointDensityCategory) {
+            WaveScreen.#POINT_DENSITY_SELECTOR.setRandomCategory();
+        }
+
+        if (!this.constantPointDensity) {
+            WaveScreen.#POINT_DENSITY_SELECTOR.resetChoice();
+        }
+    }
+
+    protected addWave(wave: Wave): void {
+        this.#WAVES.push(wave);
+        this.addRedrawListener(wave);
+    }
+
+    protected renderWaves(): void {
+        for (const wave of this.#WAVES) {
+            wave.draw();
+            wave.move();
+        }
+    }
+
+    protected debugWaves(): void {
+        for (const wave of this.#WAVES) {
+            wave.debug_drawFrame(255);
+        }
+    }
+
     // TODO - add functionality to @batpb/genart library
-    public async saveSocialMediaSet(timeout: number): Promise<void> {
+    protected async saveSocialMediaSet(timeout: number): Promise<void> {
         let ratios: AspectRatio[] = [
             ASPECT_RATIOS.SQUARE,
             ASPECT_RATIOS.PINTEREST_PIN,
