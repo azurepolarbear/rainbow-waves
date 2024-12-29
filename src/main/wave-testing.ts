@@ -23,11 +23,12 @@
 
 import P5Lib from 'p5';
 
-import {CoordinateMode, P5Context} from '@batpb/genart';
+import { CoordinateMode, P5Context } from '@batpb/genart';
 
-import {AmplitudeType, PointDensity, PointSize, Wave, WaveConfig, WaveFill} from './wave';
-import {WaveScreen} from './wave-screen';
-import {ScreenName} from "./screen-name";
+import { AmplitudeType, PointDensity, PointSize, Wave, WaveConfig, WaveFill } from './wave';
+
+import { WaveScreen } from './wave-screen';
+import { ScreenName } from './screen-name';
 
 export class WaveTesting extends WaveScreen {
     #horizontalWave: Wave;

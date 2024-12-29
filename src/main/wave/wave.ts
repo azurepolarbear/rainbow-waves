@@ -23,13 +23,14 @@
 
 import P5Lib from 'p5';
 
-import {CanvasContext, CanvasRedrawListener, CoordinateMode, P5Context} from '@batpb/genart';
+import { CanvasContext, CanvasRedrawListener, CoordinateMode, P5Context } from '@batpb/genart';
 
-import {Point, PointConfig} from './point';
+import { CategorySelector } from '../category-selector';
 
-import {WaveEdge} from './wave-edge';
-import {AmplitudeType, PointSize, WaveFill} from "./wave-categories";
-import {CategorySelector} from "../category-selector";
+import { Point, PointConfig } from './point';
+
+import { AmplitudeType, PointSize, WaveFill } from './wave-categories';
+import { WaveEdge } from './wave-edge';
 
 interface WaveData {
     amplitude_A: number;
@@ -110,7 +111,7 @@ export class Wave implements CanvasRedrawListener {
         const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
-        let theta: number = 0;
+        const theta: number = 0;
 
         if (waveFill === WaveFill.OVERLAP) {
             const spacing: number = 1.0 / targetPointTotal;
@@ -138,12 +139,11 @@ export class Wave implements CanvasRedrawListener {
             }
         } else {
             let waveRatioStart: number = 0;
-            let waveRatioEnd: number = 0;
             const minPointSize: number = pointSizeSelector.getCurrentCategoryRange()?.min ?? 0;
 
             while (waveRatioStart < 1) {
                 const waveRatioSize: number = pointSizeSelector.getChoice();
-                waveRatioEnd = waveRatioStart + waveRatioSize;
+                let waveRatioEnd: number = waveRatioStart + waveRatioSize;
 
                 if (1 - waveRatioEnd < minPointSize) {
                     waveRatioEnd = 1;
@@ -252,7 +252,7 @@ export class Wave implements CanvasRedrawListener {
             amplitude_A: amplitude_A,
             amplitude_B: amplitude_B,
             length: length
-        }
+        };
     }
 
     public debug_drawFrame(border: number): void {

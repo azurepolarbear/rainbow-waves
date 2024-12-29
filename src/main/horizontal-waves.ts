@@ -27,8 +27,8 @@ import {
     P5Context
 } from '@batpb/genart';
 
+import { ScreenName } from './screen-name';
 import { WaveScreen } from './wave-screen';
-import {ScreenName} from "./screen-name";
 
 export class HorizontalWaves extends WaveScreen {
     constructor() {

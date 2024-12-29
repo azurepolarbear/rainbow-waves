@@ -34,23 +34,23 @@ import {
     ScreenHandler
 } from '@batpb/genart';
 
-import {PointDensity, PointSize, Wave} from './wave';
+import { PointDensity, PointSize, Wave } from './wave';
 
 import { CategorySelector } from './category-selector';
-import {ScreenName} from "./screen-name";
+import { ScreenName } from './screen-name';
 
 export abstract class WaveScreen extends CanvasScreen {
     static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
-        {category: PointSize.SMALL, range: new Range(1.0 / 250.0, 1.0 / 75.0)},
-        {category: PointSize.MEDIUM, range: new Range(1.0 / 75.0, 1.0 / 25.0)},
-        {category: PointSize.LARGE, range: new Range(1 / 25.0, 1.0 / 4.0)},
-        {category: PointSize.MIXED, range: new Range(1.0 / 250.0, 1.0 / 4.0)}
+        { category: PointSize.SMALL, range: new Range(1.0 / 250.0, 1.0 / 75.0) },
+        { category: PointSize.MEDIUM, range: new Range(1.0 / 75.0, 1.0 / 25.0) },
+        { category: PointSize.LARGE, range: new Range(1 / 25.0, 1.0 / 4.0) },
+        { category: PointSize.MIXED, range: new Range(1.0 / 250.0, 1.0 / 4.0) }
     ], Random.randomBoolean());
 
     static readonly #POINT_DENSITY_SELECTOR: CategorySelector<PointDensity> = new CategorySelector<PointDensity>([
-        {category: PointDensity.LOW, range: new Range(4, 25)},
-        {category: PointDensity.MEDIUM, range: new Range(25, 75)},
-        {category: PointDensity.HIGH, range: new Range(75, 250)},
+        { category: PointDensity.LOW, range: new Range(4, 25) },
+        { category: PointDensity.MEDIUM, range: new Range(25, 75) },
+        { category: PointDensity.HIGH, range: new Range(75, 250) }
     ], Random.randomBoolean());
 
     readonly #WAVES: Wave[] = [];
@@ -155,7 +155,15 @@ export abstract class WaveScreen extends CanvasScreen {
         } else if (p5.key === 'd') {
             ScreenHandler.currentScreen = ScreenName.WAVE_TESTING;
         } else if (p5.key === 'z') {
-            this.saveSocialMediaSet(1_000).then((): void => console.log('Social media set saved.'));
+            this.saveSocialMediaSet(1_000)
+                .then(
+                    (): void => {
+                        console.log('Social media set saved.');
+                    },
+                    (): void => {
+                        console.error('Error saving social media set.');
+                    }
+                );
         }
 
         p5.background(this.#background.color);
@@ -205,7 +213,7 @@ export abstract class WaveScreen extends CanvasScreen {
 
     // TODO - add functionality to @batpb/genart library
     protected async saveSocialMediaSet(timeout: number): Promise<void> {
-        let ratios: AspectRatio[] = [
+        const ratios: AspectRatio[] = [
             ASPECT_RATIOS.SQUARE,
             ASPECT_RATIOS.PINTEREST_PIN,
             ASPECT_RATIOS.TIKTOK_PHOTO,
@@ -215,7 +223,11 @@ export abstract class WaveScreen extends CanvasScreen {
 
         let count: number = 1;
         for (const ratio of ratios) {
-            await this.#saveAspectRatio(ratio, count, timeout).then((): void => console.log(`Saved ${ratio.NAME}.`));
+            await this.#saveAspectRatio(ratio, count, timeout)
+                .then((): void => {
+                    console.log(`Saved ${ratio.NAME}.`);
+                });
+
             count++;
         }
 
@@ -226,12 +238,12 @@ export abstract class WaveScreen extends CanvasScreen {
         const p5: P5Lib = P5Context.p5;
 
         CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
+        await new Promise<void>((f: (value: void | PromiseLike<void>) => void): void => {
             setTimeout(f, timeout);
         });
 
         p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
-        await new Promise<void>(f => {
+        await new Promise<void>((f: (value: void | PromiseLike<void>) => void): void => {
             setTimeout(f, timeout);
         });
     }
