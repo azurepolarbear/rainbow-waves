@@ -28,11 +28,11 @@ import {
     P5Context,
     ScreenHandler
 } from '@batpb/genart';
-import {ScreenNames} from "./screen-names";
+import {ScreenName} from "./screen-name";
 
 export class VerticalWaves extends CanvasScreen {
     public constructor() {
-        super(ScreenNames.VERTICAL_WAVES);
+        super(ScreenName.VERTICAL_WAVES);
     }
 
     public draw(): void {

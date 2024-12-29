@@ -28,11 +28,11 @@ import {
 } from '@batpb/genart';
 
 import { WaveScreen } from './wave-screen';
-import {ScreenNames} from "./screen-names";
+import {ScreenName} from "./screen-name";
 
 export class HorizontalWaves extends WaveScreen {
     constructor() {
-        super(ScreenNames.HORIZONTAL_WAVES);
+        super(ScreenName.HORIZONTAL_WAVES);
     }
 
     public override draw(): void {

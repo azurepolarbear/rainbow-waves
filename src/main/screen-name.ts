@@ -21,7 +21,7 @@
  * for full license details.
  */
 
-export enum ScreenNames {
+export enum ScreenName {
     HORIZONTAL_WAVES = 'horizontal_waves',
     VERTICAL_WAVES = 'vertical_waves',
     WAVE_TESTING = 'wave_testing'
