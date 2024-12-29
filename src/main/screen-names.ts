@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2024 brittni and the polar bear LLC.
+ * Copyright (C) 2024 brittni and the polar bear LLC.
  *
  * This file is a part of azurepolarbear's rainbow waves algorithmic art project,
  * which is released under the GNU Affero General Public License, Version 3.0.
@@ -21,33 +21,8 @@
  * for full license details.
  */
 
-import P5Lib from 'p5';
-
-import {
-    CanvasScreen,
-    P5Context,
-    ScreenHandler
-} from '@batpb/genart';
-import {ScreenNames} from "./screen-names";
-
-export class VerticalWaves extends CanvasScreen {
-    public constructor() {
-        super(ScreenNames.VERTICAL_WAVES);
-    }
-
-    public draw(): void {
-        const p5: P5Lib = P5Context.p5;
-        p5.background(0);
-    }
-
-    public keyPressed(): void {
-        const p5: P5Lib = P5Context.p5;
-        if (p5.key === 'a') {
-            ScreenHandler.currentScreen = 'horizontal waves';
-        }
-    }
-
-    public mousePressed(): void {
-        console.log('mouse pressed on vertical waves');
-    }
+export enum ScreenNames {
+    HORIZONTAL_WAVES = 'horizontal_waves',
+    VERTICAL_WAVES = 'vertical_waves',
+    WAVE_TESTING = 'wave_testing'
 }

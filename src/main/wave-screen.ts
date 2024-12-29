@@ -37,6 +37,7 @@ import {
 import { PointDensity, PointSize } from './wave';
 
 import { CategorySelector } from './category-selector';
+import {ScreenNames} from "./screen-names";
 
 export abstract class WaveScreen extends CanvasScreen {
     static readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize> = new CategorySelector<PointSize>([
@@ -108,11 +109,11 @@ export abstract class WaveScreen extends CanvasScreen {
         } else if (p5.key === '0') {
             console.log(`framerate = ${p5.frameRate()}`);
         } else if (p5.key === 'a') {
-            ScreenHandler.currentScreen = 'horizontal waves';
+            ScreenHandler.currentScreen = ScreenNames.HORIZONTAL_WAVES;
         } else if (p5.key === 's') {
-            ScreenHandler.currentScreen = 'vertical waves';
+            ScreenHandler.currentScreen = ScreenNames.VERTICAL_WAVES;
         } else if (p5.key === 'd') {
-            ScreenHandler.currentScreen = 'wave testing';
+            ScreenHandler.currentScreen = ScreenNames.WAVE_TESTING;
         } else if (p5.key === 'z') {
             this.saveSocialMediaSet(1_000).then((): void => console.log('Social media set saved.'));
         }

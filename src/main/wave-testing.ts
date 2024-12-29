@@ -27,6 +27,7 @@ import {CoordinateMode, P5Context} from '@batpb/genart';
 
 import {AmplitudeType, PointDensity, PointSize, Wave, WaveConfig, WaveFill} from './wave';
 import {WaveScreen} from './wave-screen';
+import {ScreenNames} from "./screen-names";
 
 export class WaveTesting extends WaveScreen {
     #horizontalWave: Wave;
@@ -34,7 +35,7 @@ export class WaveTesting extends WaveScreen {
     #diagonalWave: Wave;
 
     public constructor() {
-        super('wave testing');
+        super(ScreenNames.WAVE_TESTING);
         const p5: P5Lib = P5Context.p5;
 
         WaveScreen.POINT_SIZE_SELECTOR.currentCategory = PointSize.MEDIUM;
