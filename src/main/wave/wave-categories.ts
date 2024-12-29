@@ -37,9 +37,9 @@ export enum PointSize {
  * This determines the number of points in a {@link WaveFill.OVERLAP} wave.
  */
 export enum PointDensity {
-    LOW = 0, // 4-25 points
-    MEDIUM = 1, // 25-75 points
-    HIGH = 2 // 75-250 points
+    LOW = 'low',
+    MEDIUM = 'medium',
+    HIGH = 'high'
 }
 
 export enum WaveFill {
