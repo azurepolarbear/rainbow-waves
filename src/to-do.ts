@@ -57,9 +57,6 @@
 
 // TODO - points
 // TODO     - alpha display (mixed or constant)
-// TODO     - point weight (same or different)
-// TODO     - point weight overlapping or buffered
-// TODO     - wave buffer dependent on maximum point buffer
 
 // TODO - special waves
 // TODO     - overlapping mirroring waves (same amp or different amp)
