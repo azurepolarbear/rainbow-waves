@@ -21,13 +21,21 @@
  * for full license details.
  */
 
+/**
+ * The size of the points in a wave.
+ * This determines the number of points in a {@link WaveFill.FILL} wave.
+ */
 export enum PointSize {
-    SMALL = 'small', // 1 / 250 - 1 / 75
-    MEDIUM = 'medium', // 1 / 75 - 1 / 25
-    LARGE = 'large', // 1 / 25 - 1 / 4
-    MIXED = 'mixed' // 1 / 250 - 1 / 4
+    SMALL = 'small',
+    MEDIUM = 'medium',
+    LARGE = 'large',
+    MIXED = 'mixed'
 }
 
+/**
+ * The number of points in a wave.
+ * This determines the number of points in a {@link WaveFill.OVERLAP} wave.
+ */
 export enum PointDensity {
     LOW = 0, // 4-25 points
     MEDIUM = 1, // 25-75 points
@@ -35,12 +43,26 @@ export enum PointDensity {
 }
 
 export enum WaveFill {
+    /**
+     * Wave points are built to fill in the wave without overlapping.
+     */
     FILL = 'fill',
+
+    /**
+     * Wave points are built equidistant from each other and can overlap.
+     */
     OVERLAP = 'overlap'
 }
 
 export enum AmplitudeType {
+    /**
+     * Amplitude is calculated from the edge of the wave points.
+     */
     EDGE = 'edge',
+
+    /**
+     * Amplitude is calculated from the center of the wave points.
+     */
     CENTER = 'center'
 }
 

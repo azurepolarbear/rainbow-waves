@@ -23,7 +23,16 @@
 
 import P5Lib from 'p5';
 
-import { ASPECT_RATIOS, CanvasContext, CanvasScreen, P5Context, Random, Range } from '@batpb/genart';
+import {
+    ASPECT_RATIOS,
+    CanvasContext,
+    CanvasScreen,
+    Color,
+    P5Context,
+    Random,
+    Range,
+    ScreenHandler
+} from '@batpb/genart';
 
 import { PointDensity, PointSize } from './wave';
 
@@ -42,6 +51,52 @@ export abstract class WaveScreen extends CanvasScreen {
         {category: PointDensity.MEDIUM, range: new Range(25, 75)},
         {category: PointDensity.HIGH, range: new Range(75, 250)},
     ], Random.randomBoolean());
+
+    #background: Color;
+
+    protected constructor(name: string) {
+        super(name);
+        this.#background = new Color(0, 0, 0);
+    }
+
+    public override activate(): void {
+        super.activate();
+        P5Context.p5.background(this.#background.color);
+    }
+
+    public keyPressed(): void {
+        const p5: P5Lib = P5Context.p5;
+
+        if (p5.key === '1') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SQUARE);
+        } else if (p5.key === '2') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.PINTEREST_PIN);
+        } else if (p5.key === '3') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.TIKTOK_PHOTO);
+        } else if (p5.key === '4') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SOCIAL_VIDEO);
+        } else if (p5.key === '5') {
+            CanvasContext.updateAspectRatio(ASPECT_RATIOS.WIDESCREEN);
+        } else if (p5.key === '8') {
+            CanvasContext.updateResolution(720);
+        } else if (p5.key === '9') {
+            CanvasContext.updateResolution(1080);
+        } else if (p5.key === '0') {
+            console.log(`framerate = ${p5.frameRate()}`);
+        } else if (p5.key === 'a') {
+            ScreenHandler.currentScreen = 'horizontal waves';
+        } else if (p5.key === 's') {
+            ScreenHandler.currentScreen = 'vertical waves';
+        } else if (p5.key === 'd') {
+            ScreenHandler.currentScreen = 'wave testing';
+        }
+
+        p5.background(this.#background.color);
+    }
+
+    public mousePressed(): void {
+        console.log('mousePressed() placeholder');
+    }
 
     public get sameWaveAmplitude(): boolean {
         return true;
@@ -65,33 +120,5 @@ export abstract class WaveScreen extends CanvasScreen {
 
     public static get POINT_SIZE_SELECTOR(): CategorySelector<PointSize> {
         return WaveScreen.#POINT_SIZE_SELECTOR;
-    }
-
-    public keyPressed(): void {
-        const p5: P5Lib = P5Context.p5;
-
-        if (p5.key === '1') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SQUARE);
-        } else if (p5.key === '2') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.PINTEREST_PIN);
-        } else if (p5.key === '3') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.TIKTOK_PHOTO);
-        } else if (p5.key === '4') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SOCIAL_VIDEO);
-        } else if (p5.key === '5') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.WIDESCREEN);
-        } else if (p5.key === '8') {
-            CanvasContext.updateResolution(720);
-        } else if (p5.key === '9') {
-            CanvasContext.updateResolution(1080);
-        } else if (p5.key === '0') {
-            console.log(`framerate = ${p5.frameRate()}`);
-        }
-
-        p5.background(0);
-    }
-
-    public mousePressed(): void {
-        console.log('mousePressed() placeholder');
     }
 }

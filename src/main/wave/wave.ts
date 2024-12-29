@@ -41,9 +41,10 @@ export interface WaveConfig {
     coordinateMode: CoordinateMode;
     edgeA: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
     edgeB: { top: P5Lib.Vector; bottom: P5Lib.Vector; };
+    targetPointTotal: number;
     waveFill: WaveFill;
-    pointSizeSelector: CategorySelector<PointSize>;
     amplitudeType: AmplitudeType;
+    pointSizeSelector: CategorySelector<PointSize>;
 }
 
 export class Wave implements CanvasRedrawListener {
@@ -65,7 +66,7 @@ export class Wave implements CanvasRedrawListener {
         this.#POINT_SIZE_SELECTOR = config.pointSizeSelector;
 
         this.#updateRotation();
-        this.#buildPoints();
+        this.#buildPoints(config.targetPointTotal);
     }
 
     public canvasRedraw(): void {
@@ -107,19 +108,18 @@ export class Wave implements CanvasRedrawListener {
         p5.pop();
     }
 
-    #buildPoints(): void {
+    #buildPoints(targetPointTotal: number): void {
         const p5: P5Lib = P5Context.p5;
-        const pointTotal: number = 25;
         const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
         let theta: number = 0;
 
         if (this.#WAVE_FILL === WaveFill.OVERLAP) {
-            const spacing: number = 1.0 / pointTotal;
+            const spacing: number = 1.0 / targetPointTotal;
             const offset: number = spacing / 2.0;
 
-            for (let i: number = 0; i < pointTotal; i++) {
+            for (let i: number = 0; i < targetPointTotal; i++) {
                 const waveRatioSize: number = this.#POINT_SIZE_SELECTOR.getChoice();
                 const waveRatioStart: number = (offset + (i * spacing)) - (waveRatioSize / 2.0);
                 const waveRatioEnd: number = (offset + (i * spacing)) + (waveRatioSize / 2.0);

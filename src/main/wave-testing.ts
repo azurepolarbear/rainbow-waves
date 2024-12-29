@@ -25,7 +25,7 @@ import P5Lib from 'p5';
 
 import {CoordinateMode, P5Context} from '@batpb/genart';
 
-import {AmplitudeType, PointSize, Wave, WaveConfig, WaveFill} from './wave';
+import {AmplitudeType, PointDensity, PointSize, Wave, WaveConfig, WaveFill} from './wave';
 import {WaveScreen} from './wave-screen';
 
 export class WaveTesting extends WaveScreen {
@@ -40,11 +40,15 @@ export class WaveTesting extends WaveScreen {
         WaveScreen.POINT_SIZE_SELECTOR.currentCategory = PointSize.MEDIUM;
         WaveScreen.POINT_SIZE_SELECTOR.sameChoice = false;
 
+        WaveScreen.POINT_DENSITY_SELECTOR.currentCategory = PointDensity.MEDIUM;
+        WaveScreen.POINT_DENSITY_SELECTOR.sameChoice = true;
+
         const hConfig: WaveConfig = {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0, 0.3), bottom: p5.createVector(0, 0.7) },
             edgeB: { top: p5.createVector(1, 0.4), bottom: p5.createVector(1, 0.6) },
-            waveFill: WaveFill.FILL,
+            targetPointTotal: WaveScreen.POINT_DENSITY_SELECTOR.getChoice(),
+            waveFill: WaveFill.OVERLAP,
             amplitudeType: AmplitudeType.CENTER,
             pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
         };
@@ -56,6 +60,7 @@ export class WaveTesting extends WaveScreen {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0.4, 0), bottom: p5.createVector(0.6, 0) },
             edgeB: { top: p5.createVector(0.4, 1), bottom: p5.createVector(0.6, 1) },
+            targetPointTotal: WaveScreen.POINT_DENSITY_SELECTOR.getChoice(),
             waveFill: WaveFill.FILL,
             amplitudeType: AmplitudeType.EDGE,
             pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
@@ -68,6 +73,7 @@ export class WaveTesting extends WaveScreen {
             coordinateMode: CoordinateMode.RATIO,
             edgeA: { top: p5.createVector(0, 0.1), bottom: p5.createVector(0.1, 0) },
             edgeB: { top: p5.createVector(0.9, 1), bottom: p5.createVector(1, 0.9) },
+            targetPointTotal: WaveScreen.POINT_DENSITY_SELECTOR.getChoice(),
             waveFill: WaveFill.FILL,
             amplitudeType: AmplitudeType.EDGE,
             pointSizeSelector: WaveScreen.POINT_SIZE_SELECTOR
