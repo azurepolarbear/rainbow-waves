@@ -126,57 +126,31 @@ export abstract class WaveScreen extends CanvasScreen {
 
     // TODO - add functionality to @batpb/genart library
     public async saveSocialMediaSet(timeout: number): Promise<void> {
-        const p5: P5Lib = P5Context.p5;
-        let ratio: AspectRatio = ASPECT_RATIOS.SQUARE;
+        let ratios: AspectRatio[] = [
+            ASPECT_RATIOS.SQUARE,
+            ASPECT_RATIOS.PINTEREST_PIN,
+            ASPECT_RATIOS.TIKTOK_PHOTO,
+            ASPECT_RATIOS.SOCIAL_VIDEO,
+            ASPECT_RATIOS.WIDESCREEN
+        ];
+
         let count: number = 1;
+        for (const ratio of ratios) {
+            await this.#saveAspectRatio(ratio, count, timeout).then((): void => console.log(`Saved ${ratio.NAME}.`));
+            count++;
+        }
+
+        CanvasContext.updateAspectRatio(ASPECT_RATIOS.SQUARE);
+    }
+
+    async #saveAspectRatio(ratio: AspectRatio, count: number, timeout: number): Promise<void> {
+        const p5: P5Lib = P5Context.p5;
+
         CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
         await new Promise<void>(f => {
             setTimeout(f, timeout);
         });
 
-        ratio = ASPECT_RATIOS.PINTEREST_PIN;
-        count++;
-        CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-
-        ratio = ASPECT_RATIOS.TIKTOK_PHOTO;
-        count++;
-        CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-
-        ratio = ASPECT_RATIOS.SOCIAL_VIDEO;
-        count++;
-        CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
-
-        ratio = ASPECT_RATIOS.WIDESCREEN;
-        count++;
-        CanvasContext.updateAspectRatio(ratio);
-        await new Promise<void>(f => {
-            setTimeout(f, timeout);
-        });
         p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
         await new Promise<void>(f => {
             setTimeout(f, timeout);

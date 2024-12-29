@@ -24,14 +24,12 @@
 import P5Lib from 'p5';
 
 import {
-    ASPECT_RATIOS,
-    CanvasContext,
-    CanvasScreen,
-    P5Context,
-    ScreenHandler
+    P5Context
 } from '@batpb/genart';
 
-export class HorizontalWaves extends CanvasScreen {
+import { WaveScreen } from './wave-screen';
+
+export class HorizontalWaves extends WaveScreen {
     constructor() {
         super('horizontal waves');
     }
@@ -39,35 +37,5 @@ export class HorizontalWaves extends CanvasScreen {
     public override draw(): void {
         const p5: P5Lib = P5Context.p5;
         p5.background(0);
-    }
-
-    public override keyPressed(): void {
-        const p5: P5Lib = P5Context.p5;
-
-        if (p5.key === '1') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SQUARE);
-        } else if (p5.key === '2') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.PINTEREST_PIN);
-        } else if (p5.key === '3') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.TIKTOK_PHOTO);
-        } else if (p5.key === '4') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.SOCIAL_VIDEO);
-        } else if (p5.key === '5') {
-            CanvasContext.updateAspectRatio(ASPECT_RATIOS.WIDESCREEN);
-        } else if (p5.key === '8') {
-            CanvasContext.updateResolution(720);
-        } else if (p5.key === '9') {
-            CanvasContext.updateResolution(1080);
-        } else if (p5.key === '0') {
-            console.log(`framerate = ${p5.frameRate()}`);
-        } else if (p5.key === 'a') {
-            ScreenHandler.currentScreen = 'vertical waves';
-        }
-
-        p5.background(0);
-    }
-
-    public override mousePressed(): void {
-        console.log('mouse pressed');
     }
 }
