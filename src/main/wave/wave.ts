@@ -50,23 +50,18 @@ export interface WaveConfig {
 export class Wave implements CanvasRedrawListener {
     readonly #EDGE_A: WaveEdge;
     readonly #EDGE_B: WaveEdge;
-    readonly #WAVE_FILL: WaveFill;
-    readonly #POINT_SIZE_SELECTOR: CategorySelector<PointSize>;
     readonly #AMPLITUDE_TYPE: AmplitudeType;
+    readonly #POINTS: Point[] = [];
 
     #rotation: number = 0;
-
-    #points: Point[] = [];
 
     public constructor(config: WaveConfig) {
         this.#EDGE_A = new WaveEdge(config.edgeA.top, config.edgeA.bottom, config.coordinateMode);
         this.#EDGE_B = new WaveEdge(config.edgeB.top, config.edgeB.bottom, config.coordinateMode);
-        this.#WAVE_FILL = config.waveFill;
         this.#AMPLITUDE_TYPE = config.amplitudeType;
-        this.#POINT_SIZE_SELECTOR = config.pointSizeSelector;
 
         this.#updateRotation();
-        this.#buildPoints(config.targetPointTotal);
+        this.#buildPoints(config.targetPointTotal, config.waveFill, config.pointSizeSelector);
     }
 
     public canvasRedraw(): void {
@@ -84,7 +79,7 @@ export class Wave implements CanvasRedrawListener {
         p5.translate(center_A.x, center_A.y);
         p5.rotate(this.#rotation);
 
-        this.#points.forEach((point: Point): void => {
+        this.#POINTS.forEach((point: Point): void => {
             point.draw();
         });
 
@@ -92,7 +87,7 @@ export class Wave implements CanvasRedrawListener {
     }
 
     public move(): void {
-        this.#points.forEach((point: Point): void => {
+        this.#POINTS.forEach((point: Point): void => {
             point.move();
         });
     }
@@ -108,19 +103,21 @@ export class Wave implements CanvasRedrawListener {
         p5.pop();
     }
 
-    #buildPoints(targetPointTotal: number): void {
+    #buildPoints(targetPointTotal: number,
+                 waveFill: WaveFill,
+                 pointSizeSelector: CategorySelector<PointSize>): void {
         const p5: P5Lib = P5Context.p5;
         const data: WaveData = this.#getWaveData();
         const start: P5Lib.Vector = p5.createVector(0, 0);
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
         let theta: number = 0;
 
-        if (this.#WAVE_FILL === WaveFill.OVERLAP) {
+        if (waveFill === WaveFill.OVERLAP) {
             const spacing: number = 1.0 / targetPointTotal;
             const offset: number = spacing / 2.0;
 
             for (let i: number = 0; i < targetPointTotal; i++) {
-                const waveRatioSize: number = this.#POINT_SIZE_SELECTOR.getChoice();
+                const waveRatioSize: number = pointSizeSelector.getChoice();
                 const waveRatioStart: number = (offset + (i * spacing)) - (waveRatioSize / 2.0);
                 const waveRatioEnd: number = (offset + (i * spacing)) + (waveRatioSize / 2.0);
 
@@ -137,15 +134,15 @@ export class Wave implements CanvasRedrawListener {
                     data.amplitude_B
                 );
 
-                this.#points.push(point);
+                this.#POINTS.push(point);
             }
         } else {
             let waveRatioStart: number = 0;
             let waveRatioEnd: number = 0;
-            const minPointSize: number = this.#POINT_SIZE_SELECTOR.getCurrentCategoryRange()?.min ?? 0;
+            const minPointSize: number = pointSizeSelector.getCurrentCategoryRange()?.min ?? 0;
 
             while (waveRatioStart < 1) {
-                const waveRatioSize: number = this.#POINT_SIZE_SELECTOR.getChoice();
+                const waveRatioSize: number = pointSizeSelector.getChoice();
                 waveRatioEnd = waveRatioStart + waveRatioSize;
 
                 if (1 - waveRatioEnd < minPointSize) {
@@ -165,7 +162,7 @@ export class Wave implements CanvasRedrawListener {
                     data.amplitude_B
                 );
 
-                this.#points.push(point);
+                this.#POINTS.push(point);
 
                 waveRatioStart = waveRatioEnd;
             }
@@ -221,7 +218,7 @@ export class Wave implements CanvasRedrawListener {
         const start: P5Lib.Vector = p5.createVector(0, 0);
         const end: P5Lib.Vector = p5.createVector(data.length, 0);
 
-        this.#points.forEach((point: Point): void => {
+        this.#POINTS.forEach((point: Point): void => {
             let diameter: number = data.length * point.getWaveRatioLength();
             const base: P5Lib.Vector = P5Lib.Vector.lerp(start, end, point.getWaveRatioCenter());
             const amplitudeMap: number = p5.map(point.getWaveRatioCenter(), 0, 1, data.amplitude_A, data.amplitude_B);
