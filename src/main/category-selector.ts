@@ -23,6 +23,7 @@
 
 import { Random, Range } from '@batpb/genart';
 
+// TODO - add functionality to @batpb/genart library
 export class CategorySelector<Type> {
     readonly #CHOICES: Map<Type, Range> = new Map<Type, Range>();
 

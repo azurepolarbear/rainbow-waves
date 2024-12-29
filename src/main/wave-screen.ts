@@ -124,6 +124,7 @@ export abstract class WaveScreen extends CanvasScreen {
         console.log('mousePressed() placeholder');
     }
 
+    // TODO - add functionality to @batpb/genart library
     public async saveSocialMediaSet(timeout: number): Promise<void> {
         const p5: P5Lib = P5Context.p5;
         let ratio: AspectRatio = ASPECT_RATIOS.SQUARE;
