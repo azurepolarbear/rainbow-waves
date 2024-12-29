@@ -149,7 +149,6 @@ export class Wave implements CanvasRedrawListener {
                 waveRatioEnd = waveRatioStart + waveRatioSize;
 
                 if (1 - waveRatioEnd < minPointSize) {
-                    console.log('end end end');
                     waveRatioEnd = 1;
                 }
 

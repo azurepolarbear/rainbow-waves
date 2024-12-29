@@ -24,7 +24,7 @@
 import P5Lib from 'p5';
 
 import {
-    ASPECT_RATIOS,
+    ASPECT_RATIOS, AspectRatio,
     CanvasContext,
     CanvasScreen,
     Color,
@@ -59,6 +59,30 @@ export abstract class WaveScreen extends CanvasScreen {
         this.#background = new Color(0, 0, 0);
     }
 
+    public static get POINT_DENSITY_SELECTOR(): CategorySelector<PointDensity> {
+        return WaveScreen.#POINT_DENSITY_SELECTOR;
+    }
+
+    public static get POINT_SIZE_SELECTOR(): CategorySelector<PointSize> {
+        return WaveScreen.#POINT_SIZE_SELECTOR;
+    }
+
+    public get sameWaveAmplitude(): boolean {
+        return true;
+    }
+
+    public get sameWaveDeltaTheta(): boolean {
+        return true;
+    }
+
+    public get sameWaveInitialTheta(): boolean {
+        return true;
+    }
+
+    public get sameWaveFrequency(): boolean {
+        return true;
+    }
+
     public override activate(): void {
         super.activate();
         P5Context.p5.background(this.#background.color);
@@ -89,6 +113,8 @@ export abstract class WaveScreen extends CanvasScreen {
             ScreenHandler.currentScreen = 'vertical waves';
         } else if (p5.key === 'd') {
             ScreenHandler.currentScreen = 'wave testing';
+        } else if (p5.key === 'z') {
+            this.saveSocialMediaSet(1_000).then((): void => console.log('Social media set saved.'));
         }
 
         p5.background(this.#background.color);
@@ -98,27 +124,61 @@ export abstract class WaveScreen extends CanvasScreen {
         console.log('mousePressed() placeholder');
     }
 
-    public get sameWaveAmplitude(): boolean {
-        return true;
-    }
+    public async saveSocialMediaSet(timeout: number): Promise<void> {
+        const p5: P5Lib = P5Context.p5;
+        let ratio: AspectRatio = ASPECT_RATIOS.SQUARE;
+        let count: number = 1;
+        CanvasContext.updateAspectRatio(ratio);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
+        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
 
-    public get sameWaveDeltaTheta(): boolean {
-        return true;
-    }
+        ratio = ASPECT_RATIOS.PINTEREST_PIN;
+        count++;
+        CanvasContext.updateAspectRatio(ratio);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
+        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
 
-    public get sameWaveInitialTheta(): boolean {
-        return true;
-    }
+        ratio = ASPECT_RATIOS.TIKTOK_PHOTO;
+        count++;
+        CanvasContext.updateAspectRatio(ratio);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
+        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
 
-    public get sameWaveFrequency(): boolean {
-        return true;
-    }
+        ratio = ASPECT_RATIOS.SOCIAL_VIDEO;
+        count++;
+        CanvasContext.updateAspectRatio(ratio);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
+        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
 
-    public static get POINT_DENSITY_SELECTOR(): CategorySelector<PointDensity> {
-        return WaveScreen.#POINT_DENSITY_SELECTOR;
-    }
-
-    public static get POINT_SIZE_SELECTOR(): CategorySelector<PointSize> {
-        return WaveScreen.#POINT_SIZE_SELECTOR;
+        ratio = ASPECT_RATIOS.WIDESCREEN;
+        count++;
+        CanvasContext.updateAspectRatio(ratio);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
+        p5.save(`${this.NAME}_0${count}_${ratio.NAME}.png`);
+        await new Promise<void>(f => {
+            setTimeout(f, timeout);
+        });
     }
 }
