@@ -42,7 +42,7 @@
   "homepage": "https://github.com/brittni-and-the-polar-bear/rainbow-waves#readme",
   "dependencies": {
     "@batpb/genart": "^2.0.0-rc2",
-    "p5": "^1.11.2"
+    "p5": "^1.11.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
